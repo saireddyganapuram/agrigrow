@@ -41,6 +41,21 @@ router.get('/me', auth, (req, res) => {
   return res.json({ user: req.user });
 });
 
+router.get('/profile', auth, authController.getMe);
+
+router.put(
+  '/profile',
+  auth,
+  [
+    body('name').optional().isString().isLength({ min: 2 }),
+    body('email').optional().isEmail(),
+    body('phone').optional().isString().isLength({ min: 7 }),
+    body('address').optional().isString().isLength({ min: 5 }),
+    body('username').optional().isString().isLength({ min: 3 }),
+  ],
+  authController.updateProfile
+);
+
 module.exports = router;
 
 

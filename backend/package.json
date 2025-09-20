@@ -5,7 +5,9 @@
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "seed:seeds": "node scripts/loadSeeds.js",
+    "seed:fertilizers": "node scripts/loadFertilizers.js"
   },
   "keywords": [],
   "author": "",

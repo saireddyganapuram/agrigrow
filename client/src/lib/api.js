@@ -31,4 +31,50 @@ export function getMe(token) {
   return request('/api/auth/me', { token })
 }
 
+export function fetchSeeds(crop) {
+  const qs = crop ? `?crop=${encodeURIComponent(crop)}` : ''
+  return request(`/api/seeds${qs}`)
+}
+
+export function addToCart(payload, token) {
+  return request('/api/cart', { method: 'POST', body: payload, token })
+}
+
+export function fetchCart(token) {
+  return request('/api/cart', { token })
+}
+
+export function removeFromCart(id, token) {
+  return request(`/api/cart/${id}`, { method: 'DELETE', token })
+}
+
+export function fetchFertilizers(crop) {
+  const qs = crop ? `?crop=${encodeURIComponent(crop)}` : ''
+  return request(`/api/fertilizers${qs}`)
+}
+
+export function createCropListing(payload, token) {
+  return request('/api/crop-listings', { method: 'POST', body: payload, token })
+}
+
+export function fetchMyCropListings(token) {
+  return request('/api/crop-listings/my', { token })
+}
+
+export function fetchAllCropListings() {
+  return request('/api/crop-listings/all')
+}
+
+export function deleteCropListing(id, token) {
+  return request(`/api/crop-listings/${id}`, { method: 'DELETE', token })
+}
+
+export function updateProfile(payload, token) {
+  return request('/api/auth/profile', { method: 'PUT', body: payload, token })
+}
+
+export function getProfile(token) {
+  return request('/api/auth/profile', { token })
+}
+
 

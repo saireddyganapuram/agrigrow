@@ -4,13 +4,25 @@ import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
+import Agri from './pages/Agri'
+import EditProfile from './pages/EditProfile'
+import SubmitReport from './pages/SubmitReport'
+import Transactions from './pages/Transactions'
+import CropHistory from './pages/CropHistory'
+import Cart from './pages/Cart'
+import Seeds from './pages/Seeds'
+import Fertilizers from './pages/Fertilizers'
+import Sell from './pages/Sell'
 
 export default function App() {
   const location = useLocation()
-  const hideFooter = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/dashboard'
-  const hideHeader = location.pathname === '/dashboard'
+  const path = location.pathname
+  const featurePrefixes = ['/profile/edit', '/reports/submit', '/transactions', '/crops/history', '/cart']
+  const isFeaturePage = featurePrefixes.some((p) => path.startsWith(p))
+  const hideFooter = path === '/login' || path === '/register' || path === '/dashboard' || path.startsWith('/agri') || isFeaturePage
+  const hideHeader = path === '/dashboard' || path.startsWith('/agri') || isFeaturePage
   return (
-    <div className="min-h-screen bg-agri-50 text-agri-900">
+    <div className="min-h-screen bg-agri-50 text-agri-900 flex flex-col">
       {!hideHeader && (
         <header className="border-b border-agri-200 bg-white/80 backdrop-blur sticky top-0 z-10">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -26,12 +38,21 @@ export default function App() {
         </header>
       )}
 
-      <main>
+      <main className="flex-1">
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/agri" element={<Agri />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/reports/submit" element={<SubmitReport />} />
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/crops/history" element={<CropHistory />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/agri/seeds" element={<Seeds />} />
+          <Route path="/agri/fertilizers" element={<Fertilizers />} />
+          <Route path="/agri/sell" element={<Sell />} />
         </Routes>
       </main>
 

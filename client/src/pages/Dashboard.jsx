@@ -77,7 +77,7 @@ export default function Dashboard() {
       <main className="relative max-w-6xl mx-auto px-4 pt-20 pb-10">
         <h2 className="text-2xl font-bold">Farmer Dashboard</h2>
         <div className="mt-20 grid gap-20 md:gap-40 md:grid-cols-3 place-items-center">
-          <Card title="Agri" description="Crop info, markets and inputs" icon="🌾" ghost onClick={() => {}} />
+          <Card title="Agri" description="Crop info, markets and inputs" icon="🌾" ghost onClick={() => navigate('/agri')} />
           <Card title="Cattle" description="Livestock care and marketplace" icon="🐄" ghost onClick={() => {}} />
           <Card title="Govt. Schemes" description="Latest schemes and eligibility" icon="🏛️" ghost onClick={() => {}} />
         </div>

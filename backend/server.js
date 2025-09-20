@@ -3,6 +3,10 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { connectToDatabase } = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const seedsRoutes = require('./routes/seedsRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const fertilizersRoutes = require('./routes/fertilizersRoutes');
+const cropListingRoutes = require('./routes/cropListingRoutes');
 
 dotenv.config();
 
@@ -14,6 +18,10 @@ app.use(express.json());
 
 // Mount routes early so they are available immediately
 app.use('/api/auth', authRoutes);
+app.use('/api/seeds', seedsRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/fertilizers', fertilizersRoutes);
+app.use('/api/crop-listings', cropListingRoutes);
 
 // Health check route
 app.get('/', (req, res) => {
