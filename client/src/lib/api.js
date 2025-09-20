@@ -77,4 +77,32 @@ export function getProfile(token) {
   return request('/api/auth/profile', { token })
 }
 
+export function completePayment(payload, token) {
+  return request('/api/payment/complete', { method: 'POST', body: payload, token })
+}
+
+export function getPurchaseHistory(token) {
+  return request('/api/payment/purchase-history', { token })
+}
+
+export function clearPurchaseHistory(token) {
+  return request('/api/payment/clear-purchase-history', { method: 'DELETE', token })
+}
+
+export function getSalesHistory(token) {
+  return request('/api/payment/sales-history', { token })
+}
+
+export function getTransactions(token) {
+  return request('/api/transactions', { token })
+}
+
+export function createTransaction(payload, token) {
+  return request('/api/transactions', { method: 'POST', body: payload, token })
+}
+
+export function getTransactionSummary(token) {
+  return request('/api/transactions/summary', { token })
+}
+
 

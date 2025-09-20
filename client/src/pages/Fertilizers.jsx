@@ -2,6 +2,19 @@ import { useEffect, useMemo, useState } from 'react'
 import ProfileButtonPanel from '../components/ProfileButtonPanel'
 import TopRightBrandBar from '../components/TopRightBrandBar'
 import { fetchFertilizers, addToCart } from '../lib/api'
+import f1 from '../assets/f1.png'
+import f2 from '../assets/f2.png'
+import f3 from '../assets/f3.png'
+import f4 from '../assets/f4.png'
+import f5 from '../assets/f5.png'
+import f6 from '../assets/f6.png'
+import f7 from '../assets/f7.png'
+import f8 from '../assets/f8.png'
+import f9 from '../assets/f9.png'
+import f10 from '../assets/f10.png'
+import f11 from '../assets/f11.png'
+import f12 from '../assets/f12.png'
+import f13 from '../assets/f13.png'
 
 export default function Fertilizers() {
   const [query, setQuery] = useState('')
@@ -12,6 +25,9 @@ export default function Fertilizers() {
   const [qty, setQty] = useState(1)
   const [addLoading, setAddLoading] = useState(false)
   const [addSuccess, setAddSuccess] = useState('')
+
+  // Fertilizer images mapping
+  const fertilizerImages = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13]
 
   useEffect(() => {
     setLoading(true)
@@ -62,12 +78,20 @@ export default function Fertilizers() {
                       className="group relative rounded-xl border border-agri-200 bg-white p-4 shadow transition transform hover:-translate-y-1 hover:shadow-xl"
                     >
                       <div className="absolute -right-4 -top-4 w-12 h-12 rounded-full bg-agri-100 opacity-60 transition-transform group-hover:scale-125" />
+                      {/* Fertilizer Image */}
+                      <div className="mb-3 h-24 rounded-lg border border-agri-200 bg-agri-50 flex items-center justify-center overflow-hidden">
+                        <img 
+                          src={fertilizerImages[idx % fertilizerImages.length]} 
+                          alt={fertilizer.name}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </div>
                       <p className="relative z-10 font-semibold text-agri-900">{fertilizer.name}</p>
                       <p className="relative z-10 text-sm text-agri-700 mt-1">
                         Companies: {fertilizer.companies.join(', ')}
                       </p>
                       <button 
-                        onClick={() => { setModal({ crop, fertilizer }); setQty(1); setAddSuccess('') }} 
+                        onClick={() => { setModal({ crop, fertilizer, imageUrl: fertilizerImages[idx % fertilizerImages.length] }); setQty(1); setAddSuccess('') }} 
                         className="relative z-10 mt-3 px-3 py-1.5 rounded-md bg-agri-600 text-white hover:bg-agri-700 text-sm"
                       >
                         View
@@ -90,7 +114,17 @@ export default function Fertilizers() {
               <h4 className="text-lg font-semibold text-agri-900">{modal.fertilizer.name}</h4>
               <p className="text-agri-700">{modal.crop}</p>
               <p className="text-sm text-agri-600 mt-1">Companies: {modal.fertilizer.companies.join(', ')}</p>
-              <div className="mt-4 h-40 rounded-lg border border-agri-200 bg-agri-50 flex items-center justify-center text-agri-700">Image</div>
+              <div className="mt-4 h-40 rounded-lg border border-agri-200 bg-agri-50 flex items-center justify-center overflow-hidden">
+                {modal.imageUrl ? (
+                  <img 
+                    src={modal.imageUrl} 
+                    alt={modal.fertilizer.name}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                ) : (
+                  <span className="text-agri-700">Image</span>
+                )}
+              </div>
               <div className="mt-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <button 
