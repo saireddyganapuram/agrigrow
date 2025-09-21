@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import ProfileButtonPanel from '../components/ProfileButtonPanel'
 import TopRightBrandBar from '../components/TopRightBrandBar'
 import { getTransactions, getTransactionSummary } from '../lib/api'
+import logo from '../assets/agri-logo.png'
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([])
@@ -69,103 +70,114 @@ export default function Transactions() {
   }
 
   return (
-    <>
-      <TopRightBrandBar />
-      <ProfileButtonPanel />
-      <section className="max-w-6xl mx-auto px-4 py-10">
-        <h2 className="text-3xl font-bold text-agri-900 text-center mb-8">Transaction History</h2>
-        
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-600">{error}</p>
-          </div>
-        )}
+    <div className="relative min-h-screen">
+      {/* Background Logo */}
+      <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-0">
+        <div
+          className="w-[32rem] h-[32rem] opacity-10 bg-no-repeat bg-contain bg-center"
+          style={{ backgroundImage: `url(${logo})` }}
+          aria-hidden="true"
+        />
+      </div>
 
-        {/* Transaction Summary */}
-        {summary && (
-          <div className="grid md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-white rounded-lg border border-agri-200 p-4 text-center">
-              <h3 className="text-lg font-semibold text-agri-900">Total Transactions</h3>
-              <p className="text-2xl font-bold text-agri-600">{summary.totalTransactions}</p>
-            </div>
-            <div className="bg-white rounded-lg border border-agri-200 p-4 text-center">
-              <h3 className="text-lg font-semibold text-agri-900">Total Purchases</h3>
-              <p className="text-2xl font-bold text-blue-600">₹{summary.totalPurchases.toLocaleString()}</p>
-            </div>
-            <div className="bg-white rounded-lg border border-agri-200 p-4 text-center">
-              <h3 className="text-lg font-semibold text-agri-900">Total Sales</h3>
-              <p className="text-2xl font-bold text-green-600">₹{summary.totalSales.toLocaleString()}</p>
-            </div>
-            <div className="bg-white rounded-lg border border-agri-200 p-4 text-center">
-              <h3 className="text-lg font-semibold text-agri-900">Net Amount</h3>
-              <p className={`text-2xl font-bold ${summary.netAmount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                ₹{summary.netAmount.toLocaleString()}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Transactions Table */}
-        <div className="bg-white rounded-lg border border-agri-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-agri-200">
-            <h3 className="text-xl font-semibold text-agri-900">All Transactions</h3>
-          </div>
+      <div className="relative z-10">
+        <TopRightBrandBar />
+        <ProfileButtonPanel />
+        <section className="max-w-6xl mx-auto px-4 py-10">
+          <h2 className="text-3xl font-bold text-agri-900 text-center mb-8">Transaction History</h2>
           
-          {transactions.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-agri-700">No transactions found</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full">
-                <thead className="bg-agri-50">
-                  <tr>
-                    <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Transaction ID</th>
-                    <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Type</th>
-                    <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Description</th>
-                    <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Amount</th>
-                    <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Payment Method</th>
-                    <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Status</th>
-                    <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Date</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-agri-200">
-                  {transactions.map((transaction) => (
-                    <tr key={transaction._id} className="hover:bg-agri-50">
-                      <td className="px-6 py-4 text-sm text-agri-900 break-all">
-                        {transaction.transactionId}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTypeColor(transaction.type)}`}>
-                          {transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-agri-900">
-                        {transaction.description}
-                      </td>
-                      <td className="px-6 py-4 text-sm font-semibold text-agri-900">
-                        ₹{transaction.amount.toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-agri-700">
-                        {transaction.paymentMethod.charAt(0).toUpperCase() + transaction.paymentMethod.slice(1)}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(transaction.status)}`}>
-                          {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-agri-700">
-                        {new Date(transaction.transactionDate).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <p className="text-red-600">{error}</p>
             </div>
           )}
-        </div>
-      </section>
-    </>
+
+          {/* Transaction Summary */}
+          {summary && (
+            <div className="grid md:grid-cols-4 gap-4 mb-8">
+              <div className="bg-white rounded-lg border border-agri-200 p-4 text-center">
+                <h3 className="text-lg font-semibold text-agri-900">Total Transactions</h3>
+                <p className="text-2xl font-bold text-agri-600">{summary.totalTransactions}</p>
+              </div>
+              <div className="bg-white rounded-lg border border-agri-200 p-4 text-center">
+                <h3 className="text-lg font-semibold text-agri-900">Total Purchases</h3>
+                <p className="text-2xl font-bold text-blue-600">₹{summary.totalPurchases.toLocaleString()}</p>
+              </div>
+              <div className="bg-white rounded-lg border border-agri-200 p-4 text-center">
+                <h3 className="text-lg font-semibold text-agri-900">Total Sales</h3>
+                <p className="text-2xl font-bold text-green-600">₹{summary.totalSales.toLocaleString()}</p>
+              </div>
+              <div className="bg-white rounded-lg border border-agri-200 p-4 text-center">
+                <h3 className="text-lg font-semibold text-agri-900">Net Amount</h3>
+                <p className={`text-2xl font-bold ${summary.netAmount >= 0 ? 'text-green-600' : 'text-red-600'}`}
+                  >₹{summary.netAmount.toLocaleString()}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Transactions Table */}
+          <div className="bg-white rounded-lg border border-agri-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-agri-200">
+              <h3 className="text-xl font-semibold text-agri-900">All Transactions</h3>
+            </div>
+            
+            {transactions.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-agri-700">No transactions found</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-agri-50">
+                    <tr>
+                      <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Transaction ID</th>
+                      <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Type</th>
+                      <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Description</th>
+                      <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Amount</th>
+                      <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Payment Method</th>
+                      <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Status</th>
+                      <th className="text-left px-6 py-3 text-sm font-medium text-agri-700">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-agri-200">
+                    {transactions.map((transaction) => (
+                      <tr key={transaction._id} className="hover:bg-agri-50">
+                        <td className="px-6 py-4 text-sm text-agri-900 break-all">
+                          {transaction.transactionId}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTypeColor(transaction.type)}`}>
+                            {transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-agri-900">
+                          {transaction.description}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-semibold text-agri-900">
+                          ₹{transaction.amount.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-agri-700">
+                          {transaction.paymentMethod.charAt(0).toUpperCase() + transaction.paymentMethod.slice(1)}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(transaction.status)}`}>
+                            {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-agri-700">
+                          {new Date(transaction.transactionDate).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </section>
+      </div>
+    </div>
   )
 }
 

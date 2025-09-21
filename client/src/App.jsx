@@ -26,8 +26,8 @@ export default function App() {
       {!hideHeader && (
         <header className="border-b border-agri-200 bg-white/80 backdrop-blur sticky top-0 z-10">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2 font-semibold text-lg text-agri-900">
-              <img src={logo} alt="AgriGrow" className="w-6 h-6" />
+            <Link to="/" className="flex items-center gap-3 font-semibold text-2xl text-agri-900">
+              <img src={logo} alt="AgriGrow" className="w-10 h-10" />
               AgriGrow
             </Link>
             <nav className="flex items-center gap-4 text-base">
@@ -57,7 +57,7 @@ export default function App() {
       </main>
 
       {!hideFooter && (
-        <footer className="mt-16 border-t border-agri-200">
+        <footer className="border-t border-agri-200">
           <div className="max-w-6xl mx-auto px-4 py-4 text-sm text-agri-700 grid md:grid-cols-3 gap-4">
             <div>
               <div className="flex items-center gap-2 font-semibold text-agri-900">
