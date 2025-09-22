@@ -9,6 +9,8 @@ const fertilizersRoutes = require('./routes/fertilizersRoutes');
 const cropListingRoutes = require('./routes/cropListingRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
+const doctorRoutes = require('./routes/doctorRoutes');
+const customerRoutes = require('./routes/customerRoutes');
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use('/api/fertilizers', fertilizersRoutes);
 app.use('/api/crop-listings', cropListingRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/doctors', doctorRoutes);
+app.use('/api/customers', customerRoutes);
 
 // Health check route
 app.get('/', (req, res) => {

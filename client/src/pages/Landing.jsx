@@ -12,7 +12,7 @@ export default function Landing() {
           Access market prices, connect with buyers, and manage your farm data securely.
         </p>
         <div className="mt-8">
-          <Link to="/register" className="inline-block px-6 py-3 rounded-md bg-agri-600 text-white hover:bg-agri-700">
+          <Link to="/select-role" className="inline-block px-6 py-3 rounded-md bg-agri-600 text-white hover:bg-agri-700">
             Get Started
           </Link>
         </div>

@@ -9,18 +9,24 @@ import EditProfile from './pages/EditProfile'
 import SubmitReport from './pages/SubmitReport'
 import Transactions from './pages/Transactions'
 import CropHistory from './pages/CropHistory'
-import Cart from './pages/Cart'
+import Cattle from './pages/Cattle'
+import Sell from './pages/Sell'
 import Seeds from './pages/Seeds'
 import Fertilizers from './pages/Fertilizers'
-import Sell from './pages/Sell'
+import Cart from './pages/Cart'
+import CattleHistory from './pages/CattleHistory'
+import GovtSchemes from './pages/GovtSchemes'
+import SelectRole from './pages/SelectRole'
+import DoctorRegister from './pages/DoctorRegister'
+import CustomerRegister from './pages/CustomerRegister'
 
 export default function App() {
   const location = useLocation()
   const path = location.pathname
   const featurePrefixes = ['/profile/edit', '/reports/submit', '/transactions', '/crops/history', '/cart']
   const isFeaturePage = featurePrefixes.some((p) => path.startsWith(p))
-  const hideFooter = path === '/login' || path === '/register' || path === '/dashboard' || path.startsWith('/agri') || isFeaturePage
-  const hideHeader = path === '/dashboard' || path.startsWith('/agri') || isFeaturePage
+  const hideFooter = path === '/login' || path === '/register' || path === '/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
+  const hideHeader = path === '/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
   return (
     <div className="min-h-screen bg-agri-50 text-agri-900 flex flex-col">
       {!hideHeader && (
@@ -43,6 +49,9 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/select-role" element={<SelectRole />} />
+          <Route path="/doctors/register" element={<DoctorRegister />} />
+          <Route path="/customers/register" element={<CustomerRegister />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/agri" element={<Agri />} />
           <Route path="/profile/edit" element={<EditProfile />} />
@@ -53,6 +62,9 @@ export default function App() {
           <Route path="/agri/seeds" element={<Seeds />} />
           <Route path="/agri/fertilizers" element={<Fertilizers />} />
           <Route path="/agri/sell" element={<Sell />} />
+          <Route path='/cattle' element={<Cattle />} />
+          <Route path='/cattle-history' element={<CattleHistory />} />
+          <Route path='/govt-schemes' element={<GovtSchemes />} />
         </Routes>
       </main>
 

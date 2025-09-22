@@ -78,8 +78,8 @@ export default function Dashboard() {
         <h2 className="text-2xl font-bold">Farmer Dashboard</h2>
         <div className="mt-20 grid gap-20 md:gap-40 md:grid-cols-3 place-items-center">
           <Card title="Agri" description="Crop info, markets and inputs" icon="🌾" ghost onClick={() => navigate('/agri')} />
-          <Card title="Cattle" description="Livestock care and marketplace" icon="🐄" ghost onClick={() => {}} />
-          <Card title="Govt. Schemes" description="Latest schemes and eligibility" icon="🏛️" ghost onClick={() => {}} />
+          <Card title="Cattle" description="Livestock care and marketplace" icon="🐄" ghost onClick={() => navigate('/cattle')} />
+          <Card title="Govt. Schemes" description="Latest schemes and eligibility" icon="🏛️" ghost onClick={() => navigate('/govt-schemes')} />
         </div>
       </main>
       {panelOpen && (
