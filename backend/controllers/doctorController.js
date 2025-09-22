@@ -15,7 +15,7 @@ exports.register = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { fullname, email, username, phone, address, password, qualification, specialization, experience, licenseNumber } = req.body;
+  const { fullname, email, username, phone, address, password, qualification, specialization, experience, licenseNumber, confirmPassword } = req.body;
 
   try {
     const existing = await Doctor.findOne({ $or: [{ email }, { username }] });

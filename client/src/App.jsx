@@ -1,13 +1,17 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import logo from './assets/agri-logo.png'
-import Landing from './pages/Landing'
-import Login from './pages/Login'
-import Register from './pages/Register'
+import SelectRole from './pages/SelectRole'
+import DoctorRegister from './pages/DoctorRegister'
+import CustomerRegister from './pages/CustomerRegister'
+import DoctorDashboard from './pages/DoctorDashboard'
 import Dashboard from './pages/Dashboard'
 import Agri from './pages/Agri'
 import EditProfile from './pages/EditProfile'
 import SubmitReport from './pages/SubmitReport'
 import Transactions from './pages/Transactions'
+import Landing from './pages/Landing'
+import Login from './pages/Login'
+import Register from './pages/Register'
 import CropHistory from './pages/CropHistory'
 import Cattle from './pages/Cattle'
 import Sell from './pages/Sell'
@@ -16,17 +20,14 @@ import Fertilizers from './pages/Fertilizers'
 import Cart from './pages/Cart'
 import CattleHistory from './pages/CattleHistory'
 import GovtSchemes from './pages/GovtSchemes'
-import SelectRole from './pages/SelectRole'
-import DoctorRegister from './pages/DoctorRegister'
-import CustomerRegister from './pages/CustomerRegister'
 
 export default function App() {
   const location = useLocation()
   const path = location.pathname
   const featurePrefixes = ['/profile/edit', '/reports/submit', '/transactions', '/crops/history', '/cart']
   const isFeaturePage = featurePrefixes.some((p) => path.startsWith(p))
-  const hideFooter = path === '/login' || path === '/register' || path === '/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
-  const hideHeader = path === '/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
+  const hideFooter = path === '/login' || path === '/register' || path === '/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
+  const hideHeader = path === '/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
   return (
     <div className="min-h-screen bg-agri-50 text-agri-900 flex flex-col">
       {!hideHeader && (
@@ -37,8 +38,13 @@ export default function App() {
               AgriGrow
             </Link>
             <nav className="flex items-center gap-4 text-base">
-              <Link to="/login" className="text-agri-700 hover:text-agri-900">Login</Link>
-              <Link to="/select-role" className="px-3 py-1.5 rounded-md bg-agri-600 text-white hover:bg-agri-700">Get Started</Link>
+              {path !== '/login' && (
+                path === '/' ? (
+                  <Link to="/select-role" className="px-3 py-1.5 rounded-md bg-agri-600 text-white hover:bg-agri-700">Get Started</Link>
+                ) : (
+                  <Link to="/login" className="px-3 py-1.5 rounded-md bg-agri-600 text-white hover:bg-agri-700">Login</Link>
+                )
+              )}
             </nav>
           </div>
         </header>
@@ -51,6 +57,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/select-role" element={<SelectRole />} />
           <Route path="/doctors/register" element={<DoctorRegister />} />
+          <Route path="/doctors/dashboard" element={<DoctorDashboard />} />
           <Route path="/customers/register" element={<CustomerRegister />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/agri" element={<Agri />} />

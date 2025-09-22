@@ -57,7 +57,7 @@ export default function DoctorRegister() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/doctors/register', {
+const response = await fetch(`${import.meta.env.VITE_API_URL}/api/doctors/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export default function DoctorRegister() {
           qualification: form.qualification,
           specialization: form.specialization,
           experience: form.experience ? parseInt(form.experience) : undefined,
-          licenseNumber: form.licenseNumber,
+          confirmPassword: form.confirmPassword,
           username: form.username,
           password: form.password,
         }),
@@ -84,7 +84,7 @@ export default function DoctorRegister() {
 
       localStorage.setItem('token', data.token)
       localStorage.setItem('user', JSON.stringify(data.doctor))
-      navigate('/dashboard')
+      navigate('/doctors/dashboard')
     } catch (err) {
       setError(err.message || 'Registration failed')
     } finally {
@@ -94,7 +94,7 @@ export default function DoctorRegister() {
 
   return (
     <section className="max-w-2xl mx-auto px-4 py-16">
-      <h2 className="text-2xl font-bold text-agri-900">Doctor Registration</h2>
+      <h2 className="text-2xl font-bold text-agri-900">Veterinary Doctor Registration</h2>
 
       {step === 1 && (
         <form onSubmit={onNext} className="mt-6 grid md:grid-cols-2 gap-4">
@@ -118,19 +118,19 @@ export default function DoctorRegister() {
             <input value={form.address} onChange={update('address')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" required />
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm text-agri-700">Medical Qualification</label>
-            <input value={form.qualification} onChange={update('qualification')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" placeholder="e.g., MBBS, MD, MS" required />
+            <label className="block text-sm text-agri-700">Veterinary Qualification</label>
+            <input value={form.qualification} onChange={update('qualification')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" placeholder="e.g., BVSc, MVSc, DVM" required />
           </div>
           <div>
             <label className="block text-sm text-agri-700">Specialization</label>
-            <input value={form.specialization} onChange={update('specialization')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" placeholder="e.g., Cardiology, Pediatrics" />
+            <input value={form.specialization} onChange={update('specialization')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" placeholder="e.g., Large Animal Medicine, Small Animal Surgery, Equine Medicine" />
           </div>
           <div>
             <label className="block text-sm text-agri-700">Years of Experience</label>
             <input type="number" min="0" value={form.experience} onChange={update('experience')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" />
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm text-agri-700">Medical License Number</label>
+            <label className="block text-sm text-agri-700">Veterinary License Number</label>
             <input value={form.licenseNumber} onChange={update('licenseNumber')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" />
           </div>
           <div className="md:col-span-2 flex justify-end">
