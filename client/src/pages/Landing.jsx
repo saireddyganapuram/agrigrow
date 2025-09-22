@@ -6,10 +6,10 @@ export default function Landing() {
     <section className="max-w-6xl mx-auto px-4 py-12 md:py-16 grid md:grid-cols-2 gap-10 items-center min-h-[calc(100vh-64px-200px)] md:min-h-[calc(100vh-72px-200px)]">
       <div>
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-agri-900">
-          Empowering Farmers with Simple Tools
+          A Technical Solution for Farmer Empowerment
         </h1>
         <p className="mt-4 text-agri-700 max-w-prose">
-          Access market prices, connect with buyers, and manage your farm data securely.
+          An Integrated Platform for Crop Production, Animal Husbandry, and Market Place
         </p>
         <div className="mt-8">
           <Link to="/select-role" className="inline-block px-6 py-3 rounded-md bg-agri-600 text-white hover:bg-agri-700">
