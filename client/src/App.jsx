@@ -38,7 +38,7 @@ export default function App() {
             </Link>
             <nav className="flex items-center gap-4 text-base">
               <Link to="/login" className="text-agri-700 hover:text-agri-900">Login</Link>
-              <Link to="/register" className="px-3 py-1.5 rounded-md bg-agri-600 text-white hover:bg-agri-700">Get Started</Link>
+              <Link to="/select-role" className="px-3 py-1.5 rounded-md bg-agri-600 text-white hover:bg-agri-700">Get Started</Link>
             </nav>
           </div>
         </header>
