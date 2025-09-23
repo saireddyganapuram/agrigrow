@@ -24,6 +24,7 @@ import Fertilizers from './pages/Fertilizers'
 import Cart from './pages/Cart'
 import CattleHistory from './pages/CattleHistory'
 import GovtSchemes from './pages/GovtSchemes'
+import CustomerDashboard from './pages/CustomerDashboard'
 import DoctorEditProfile from './pages/DoctorEditProfile'
 
 export default function App() {
@@ -67,7 +68,7 @@ export default function App() {
           <Route path="/doctors/dashboard" element={<DoctorDashboard />} />
           <Route path="/doctors/profile/edit" element={<DoctorEditProfile />} />
           <Route path="/customers/register" element={<CustomerRegister />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<CustomerDashboard />} />
           <Route path="/agri" element={<Agri />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/reports/submit" element={<SubmitReport />} />

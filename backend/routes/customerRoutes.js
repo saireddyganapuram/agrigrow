@@ -9,11 +9,11 @@ const router = Router();
 router.post(
   '/register',
   [
-    body('fullname').isString().isLength({ min: 2 }).withMessage('Full name is required'),
+    body('fullname').isLength({ min: 2 }).withMessage('Full name is required'),
     body('email').isEmail().withMessage('Valid email required'),
-    body('phone').isString().isLength({ min: 7 }).withMessage('Phone is required'),
-    body('address').isString().isLength({ min: 5 }).withMessage('Address is required'),
-    body('username').isString().isLength({ min: 3 }).withMessage('Username is required'),
+    body('phone').isLength({ min: 7 }).withMessage('Phone is required'),
+    body('address').isLength({ min: 5 }).withMessage('Address is required'),
+    body('username').isLength({ min: 3 }).withMessage('Username is required'),
     body('password').isLength({ min: 6 }).withMessage('Password min length 6'),
     body('confirmPassword').custom((value, { req }) => {
       if (value !== req.body.password) {
@@ -22,10 +22,6 @@ router.post(
       return true;
     }),
     body('gender').optional().isIn(['Male', 'Female', 'Other']),
-    body('dateOfBirth').optional().isISO8601().withMessage('Valid date of birth required'),
-    body('emergencyContact.name').optional().isString().isLength({ min: 2 }),
-    body('emergencyContact.phone').optional().isString().isLength({ min: 7 }),
-    body('emergencyContact.relation').optional().isString().isLength({ min: 2 }),
   ],
   customerController.register
 );
@@ -57,11 +53,6 @@ router.put(
     body('address').optional().isString().isLength({ min: 5 }),
     body('username').optional().isString().isLength({ min: 3 }),
     body('gender').optional().isIn(['Male', 'Female', 'Other']),
-    body('dateOfBirth').optional().isISO8601(),
-    body('emergencyContact').optional().isObject(),
-    body('emergencyContact.name').optional().isString().isLength({ min: 2 }),
-    body('emergencyContact.phone').optional().isString().isLength({ min: 7 }),
-    body('emergencyContact.relation').optional().isString().isLength({ min: 2 }),
   ],
   customerController.updateProfile
 );

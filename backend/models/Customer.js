@@ -9,13 +9,7 @@ const customerSchema = new mongoose.Schema(
     address: { type: String, required: true, trim: true },
     username: { type: String, required: true, unique: true, lowercase: true, trim: true },
     passwordHash: { type: String, required: true },
-    dateOfBirth: { type: Date },
     gender: { type: String, enum: ['Male', 'Female', 'Other'], trim: true },
-    emergencyContact: {
-      name: { type: String, trim: true },
-      phone: { type: String, trim: true },
-      relation: { type: String, trim: true }
-    },
     medicalHistory: [{
       condition: { type: String, trim: true },
       diagnosedDate: { type: Date },

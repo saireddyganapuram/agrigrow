@@ -9,14 +9,9 @@ export default function CustomerRegister() {
     email: '',
     phone: '',
     address: '',
-    dateOfBirth: '',
     gender: '',
-    emergencyContactName: '',
-    emergencyContactPhone: '',
-    emergencyContactRelation: '',
     username: '',
     password: '',
-    confirmPassword: '',
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -26,19 +21,18 @@ export default function CustomerRegister() {
 
   const canNext = useMemo(() => {
     return (
-      form.fullname.trim() &&
-      form.email.trim() &&
-      form.phone.trim() &&
-      form.address.trim() &&
-      form.dateOfBirth.trim()
+      form.fullname && form.fullname.trim() &&
+      form.email && form.email.trim() &&
+      form.phone && form.phone.trim() &&
+      form.address && form.address.trim()
     )
   }, [form])
 
   const canSubmit = useMemo(() => {
     return (
-      form.username.trim() &&
-      form.password.trim() &&
-      form.confirmPassword.trim() &&
+      form.username && form.username.trim() &&
+      form.password && form.password.trim() &&
+      form.confirmPassword && form.confirmPassword.trim() &&
       form.password === form.confirmPassword
     )
   }, [form])
@@ -59,38 +53,40 @@ export default function CustomerRegister() {
     setLoading(true)
 
     try {
+      const requestData = {
+        fullname: form.fullname,
+        email: form.email,
+        phone: form.phone,
+        address: form.address,
+        gender: form.gender,
+        username: form.username,
+        password: form.password,
+        confirmPassword: form.confirmPassword,
+      }
+
+      console.log('Sending registration request:', requestData)
+
       const response = await fetch('/api/customers/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          fullname: form.fullname,
-          email: form.email,
-          phone: form.phone,
-          address: form.address,
-          dateOfBirth: form.dateOfBirth,
-          gender: form.gender,
-          emergencyContact: {
-            name: form.emergencyContactName,
-            phone: form.emergencyContactPhone,
-            relation: form.emergencyContactRelation,
-          },
-          username: form.username,
-          password: form.password,
-        }),
+        body: JSON.stringify(requestData),
       })
 
+      console.log('Response status:', response.status)
       const data = await response.json()
+      console.log('Response data:', data)
 
       if (!response.ok) {
-        throw new Error(data.error || 'Registration failed')
+        throw new Error(data.error || data.errors?.[0]?.msg || 'Registration failed')
       }
 
       localStorage.setItem('token', data.token)
       localStorage.setItem('user', JSON.stringify(data.customer))
       navigate('/dashboard')
     } catch (err) {
+      console.error('Registration error:', err)
       setError(err.message || 'Registration failed')
     } finally {
       setLoading(false)
@@ -133,13 +129,9 @@ export default function CustomerRegister() {
                 <label className="block text-sm text-agri-700">Phone</label>
                 <input value={form.phone} onChange={update('phone')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" required />
               </div>
-              <div className="md:col-span-2">
+              <div>
                 <label className="block text-sm text-agri-700">Address</label>
                 <input value={form.address} onChange={update('address')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" required />
-              </div>
-              <div>
-                <label className="block text-sm text-agri-700">Date of Birth</label>
-                <input type="date" value={form.dateOfBirth} onChange={update('dateOfBirth')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" required />
               </div>
               <div>
                 <label className="block text-sm text-agri-700">Gender</label>
@@ -149,24 +141,6 @@ export default function CustomerRegister() {
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
                 </select>
-              </div>
-
-              <div className="md:col-span-2 border-t border-agri-200 pt-4 mt-4">
-                <h3 className="text-lg font-semibold text-agri-900 mb-3">Emergency Contact</h3>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm text-agri-700">Contact Name</label>
-                    <input value={form.emergencyContactName} onChange={update('emergencyContactName')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-agri-700">Contact Phone</label>
-                    <input value={form.emergencyContactPhone} onChange={update('emergencyContactPhone')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-agri-700">Relation</label>
-                    <input value={form.emergencyContactRelation} onChange={update('emergencyContactRelation')} className="mt-1 w-full rounded-md border border-agri-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-agri-400" placeholder="e.g., Father, Spouse" />
-                  </div>
-                </div>
               </div>
 
               <div className="md:col-span-2 flex justify-end">
@@ -185,9 +159,7 @@ export default function CustomerRegister() {
                 <div><span className="font-medium">Email:</span> {form.email}</div>
                 <div><span className="font-medium">Phone:</span> {form.phone}</div>
                 <div><span className="font-medium">Address:</span> {form.address}</div>
-                <div><span className="font-medium">Date of Birth:</span> {form.dateOfBirth}</div>
-                {form.gender && <div><span className="font-medium">Gender:</span> {form.gender}</div>}
-                {form.emergencyContactName && <div><span className="font-medium">Emergency Contact:</span> {form.emergencyContactName} ({form.emergencyContactPhone})</div>}
+                <div><span className="font-medium">Gender:</span> {form.gender}</div>
               </div>
               <div>
                 <label className="block text-sm text-agri-700">Username</label>

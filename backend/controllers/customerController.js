@@ -12,6 +12,7 @@ function generateToken(customer) {
 exports.register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log('Validation errors:', errors.array());
     return res.status(400).json({ errors: errors.array() });
   }
 
@@ -22,17 +23,20 @@ exports.register = async (req, res) => {
     phone,
     address,
     password,
-    dateOfBirth,
     gender,
-    emergencyContact
+    confirmPassword
   } = req.body;
+
+  console.log('Registration attempt:', { fullname, email, username, phone, address, gender });
 
   try {
     const existing = await Customer.findOne({ $or: [{ email }, { username }] });
     if (existing && existing.email === email) {
+      console.log('Email already exists:', email);
       return res.status(409).json({ error: 'Email already registered' });
     }
     if (existing && existing.username === username) {
+      console.log('Username already exists:', username);
       return res.status(409).json({ error: 'Username already taken' });
     }
 
@@ -44,10 +48,10 @@ exports.register = async (req, res) => {
       phone,
       address,
       passwordHash,
-      dateOfBirth,
-      gender,
-      emergencyContact
+      gender
     });
+
+    console.log('Customer created successfully:', customer._id);
 
     const token = generateToken(customer);
     return res.status(201).json({
@@ -58,14 +62,12 @@ exports.register = async (req, res) => {
         username: customer.username,
         phone: customer.phone,
         address: customer.address,
-        dateOfBirth: customer.dateOfBirth,
-        gender: customer.gender,
-        emergencyContact: customer.emergencyContact
+        gender: customer.gender
       },
       token,
     });
   } catch (err) {
-    console.error(err);
+    console.error('Registration error:', err);
     return res.status(500).json({ error: 'Failed to register customer' });
   }
 };
@@ -99,9 +101,7 @@ exports.login = async (req, res) => {
         username: customer.username,
         phone: customer.phone,
         address: customer.address,
-        dateOfBirth: customer.dateOfBirth,
-        gender: customer.gender,
-        emergencyContact: customer.emergencyContact
+        gender: customer.gender
       },
       token,
     });
@@ -133,9 +133,7 @@ exports.updateProfile = async (req, res) => {
       phone,
       address,
       username,
-      dateOfBirth,
-      gender,
-      emergencyContact
+      gender
     } = req.body;
 
     // Check if email is already taken by another customer
@@ -160,9 +158,7 @@ exports.updateProfile = async (req, res) => {
     if (phone) updateData.phone = phone;
     if (address) updateData.address = address;
     if (username) updateData.username = username;
-    if (dateOfBirth) updateData.dateOfBirth = dateOfBirth;
     if (gender) updateData.gender = gender;
-    if (emergencyContact) updateData.emergencyContact = emergencyContact;
 
     const customer = await Customer.findByIdAndUpdate(
       customerId,
