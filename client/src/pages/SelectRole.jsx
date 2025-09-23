@@ -70,7 +70,7 @@ export default function SelectRole() {
             <div className="w-full max-w-xs flex justify-center">
               <Card
                 title="Customer"
-                description="Access healthcare services and manage your medical records"
+                description="Your food, straight from the farm to your door."
                 icon="👤"
                 ghost
                 onClick={() => navigate('/customers/register')}

@@ -87,13 +87,14 @@ export default function App() {
 
       {!hideFooter && (
         <footer className="border-t border-agri-200">
-          <div className="max-w-6xl mx-auto px-4 py-4 text-sm text-agri-700 grid md:grid-cols-3 gap-4">
+          <div className="max-w-6xl mx-auto px-4 py-1 text-sm text-agri-700 grid md:grid-cols-3 gap-20">
             <div>
               <div className="flex items-center gap-2 font-semibold text-agri-900">
                 <img src={logo} alt="AgriGrow" className="w-5 h-5" />
                 AgriGrow
               </div>
-              <p className="mt-2">Simple tools to help farmers grow and sell better.</p>
+              <p className="mt-2">An Integrated Platform for Crop Production, Animal Husbandry, and Market Place 
+                                  below the agri grow in the landing page</p>
             </div>
             <div>
               <p className="font-semibold text-agri-900">Contact</p>
