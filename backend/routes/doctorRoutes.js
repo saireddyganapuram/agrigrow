@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { body, oneOf } = require('express-validator');
 const doctorController = require('../controllers/doctorController');
+const appointmentController = require('../controllers/appointmentController');
 const auth = require('../middleware/auth');
 
 const router = Router();
@@ -62,6 +63,24 @@ router.put(
 
 // Get all doctors (admin/doctor view)
 router.get('/', auth, doctorController.getAllDoctors);
+
+// Get doctor's appointments (doctor only)
+router.get(
+  '/appointments',
+  auth,
+  appointmentController.getDoctorAppointments
+);
+
+// Update appointment status (doctor only)
+router.patch(
+  '/appointments/:appointmentId/status',
+  auth,
+  [
+    body('status').isIn(['pending', 'confirmed', 'cancelled', 'completed']).withMessage('Invalid status'),
+    body('notes').optional().trim()
+  ],
+  appointmentController.updateAppointmentStatus
+);
 
 // Get doctor by ID
 router.get('/:id', auth, doctorController.getDoctorById);

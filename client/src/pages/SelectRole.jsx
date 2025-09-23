@@ -42,8 +42,6 @@ export default function SelectRole() {
             AgriGrow
           </Link>
           <div className="flex-1" />
-          <div className="flex items-center gap-3 ml-auto pr-0">
-          </div>
         </div>
       </header>
 

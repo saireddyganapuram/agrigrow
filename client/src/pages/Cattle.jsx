@@ -2,26 +2,22 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/agri-logo.png'
 
+import DoctorsList from '../components/DoctorsList';
+
 function LeftPanel({ activeSection, setActiveSection, isOpen, onClose, onNavigation }) {
   const menuItems = [
-    { id: 'home', label: 'Add Animals', icon: '➕' },
-    { id: 'history', label: 'View Records', icon: '📊' },
-    { id: 'edit', label: 'Edit', icon: '✏️' }
+    { id: 'home', label: 'Add Animals', icon: '🐄' },
+    { id: 'history', label: 'View Records', icon: '📋' },
+    { id: 'doctors', label: 'Veterinarians', icon: '👨‍⚕️' }
   ]
 
   return (
-    <div className={`fixed left-0 top-0 h-full w-64 z-30 transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-      <div className="bg-gradient-to-b from-agri-200 via-agri-100 to-agri-50 border border-agri-300 rounded-2xl shadow-2xl p-6 h-full">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-xl font-bold text-agri-900">Navigation</h2>
-          <button
-            onClick={onClose}
-            className="text-agri-800 hover:text-agri-900 p-2 rounded-full hover:bg-agri-300 transition-all duration-200"
-          >
-            ✕
-          </button>
-        </div>
-        <nav className="space-y-3">
+    <div className={`fixed left-0 top-0 h-full w-72 z-30 transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className="bg-white/90 backdrop-blur-lg border-r border-agri-200 h-full p-6 shadow-xl z-40">
+        <div className="mb-10 pt-4">
+        <h2 className="text-2xl font-bold text-agri-900">Cattle</h2>
+      </div>
+        <nav className="space-y-2">
           {menuItems.map((item) => (
             <button
               key={item.id}
@@ -29,24 +25,17 @@ function LeftPanel({ activeSection, setActiveSection, isOpen, onClose, onNavigat
                 onNavigation(item.id)
                 if (window.innerWidth < 768) onClose()
               }}
-              className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-200 group ${
+              className={`w-full flex items-center gap-4 px-4 py-3 transition-all duration-200 rounded-lg ${
                 activeSection === item.id
-                  ? 'bg-agri-100 text-agri-900 shadow-lg transform scale-105'
-                  : 'text-agri-700 hover:text-agri-900 hover:bg-agri-50 hover:translate-x-2'
+                  ? 'text-agri-900 font-semibold bg-agri-200/80'
+                  : 'text-agri-700 hover:bg-agri-100/60 hover:text-agri-900'
               }`}
             >
-              <span className="text-2xl group-hover:scale-110 transition-transform duration-200">{item.icon}</span>
+              <span className="text-xl">{item.icon}</span>
               <span className="font-medium">{item.label}</span>
-              {activeSection === item.id && (
-                <div className="ml-auto w-2 h-2 bg-agri-900 rounded-full animate-pulse"></div>
-              )}
             </button>
           ))}
         </nav>
-
-        {/* Decorative elements */}
-        <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-agri-50 to-transparent rounded-b-2xl"></div>
-        <div className="absolute top-1/2 left-0 w-1 h-16 bg-agri-400 rounded-r-full -translate-y-1/2"></div>
       </div>
     </div>
   )
@@ -438,6 +427,7 @@ function Cattle() {
   const [cattleData, setCattleData] = useState(null)
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
+  const [token, setToken] = useState(localStorage.getItem('token'))
 
   const handleFormSubmit = (data) => {
     setCattleData(data)
@@ -451,6 +441,24 @@ function Cattle() {
     navigate('/cattle-history')
   }
 
+  const handleNavigation = (section) => {
+    if (section === 'edit') {
+      setEditMode(true)
+      setShowForm(false)
+      setActiveSection('edit')
+    } else if (section === 'home') {
+      setShowForm(true)
+      setEditMode(false)
+      setActiveSection(section)
+    } else if (section === 'doctors') {
+      setShowForm(false)
+      setEditMode(false)
+      setActiveSection(section)
+    } else {
+      setActiveSection(section)
+    }
+  }
+
   const handleEdit = (section) => {
     if (section === 'edit') {
       setEditMode(true)
@@ -458,11 +466,17 @@ function Cattle() {
       setActiveSection('edit')
     } else if (section === 'history') {
       navigate('/cattle-history')
+    } else if (section === 'doctors') {
+      setEditMode(false)
+      setShowForm(false)
+      setActiveSection('doctors')
     } else if (section === 'home') {
       setEditMode(false)
       setShowForm(true)
       setActiveSection('home')
     }
+    // Close the panel after selection
+    setIsPanelOpen(false)
   }
 
   const handleRemoveAnimal = (animalIndex) => {
@@ -525,8 +539,12 @@ function Cattle() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-agri-200 via-agri-100 to-agri-50">
-      <header className="bg-white shadow-sm border-b border-agri-200">
+    <div className="min-h-screen bg-gradient-to-b from-agri-200 via-agri-100 to-agri-50 transition-all duration-300">
+      {/* Blur overlay when panel is open */}
+      {isPanelOpen && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-20" onClick={() => setIsPanelOpen(false)} />
+      )}
+      <header className="bg-white shadow-sm border-b border-agri-200 fixed top-0 left-0 right-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
@@ -544,7 +562,7 @@ function Cattle() {
         </div>
       </header>
 
-      <div className="flex h-[calc(100vh-80px)] relative">
+      <div className="flex h-screen pt-16 relative">
         <LeftPanel
           activeSection={activeSection}
           setActiveSection={setActiveSection}
@@ -553,13 +571,10 @@ function Cattle() {
           onNavigation={handleEdit}
         />
 
-        {/* Overlay when panel is open on mobile */}
-        {isPanelOpen && (
-          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-20 md:hidden" onClick={() => setIsPanelOpen(false)} />
-        )}
-
-        <main className={`flex-1 transition-all duration-300 ${isPanelOpen ? 'md:ml-0' : 'ml-0'} p-8 overflow-y-auto`}>
-          {editMode ? (
+        <main className={`flex-1 transition-all duration-300 ${isPanelOpen ? 'md:ml-72' : 'ml-0'} p-6 md:p-8 overflow-y-auto`}>
+          {activeSection === 'doctors' ? (
+            <DoctorsList token={token} />
+          ) : editMode ? (
             <CattleEditView
               cattleData={cattleData}
               onRemoveAnimal={handleRemoveAnimal}

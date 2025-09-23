@@ -1,22 +1,38 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+// The base URL is now handled by Vite's proxy in development
+const BASE_URL = import.meta.env.VITE_API_URL || ''
 
-async function request(path, options = {}) {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}),
-      ...(options.headers || {}),
-    },
-    method: options.method || 'GET',
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  })
+export async function request(path, options = {}) {
+  const { body, token, ...rest } = options;
+  const headers = {
+    'Content-Type': 'application/json',
+  };
 
-  const data = await res.json().catch(() => ({}))
-  if (!res.ok) {
-    const message = data?.error || data?.message || 'Request failed'
-    throw new Error(message)
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
-  return data
+
+  try {
+    const response = await fetch(`${BASE_URL}${path}`, {
+      ...rest,
+      headers,
+      credentials: 'include',
+      body: body ? JSON.stringify(body) : undefined,
+    });
+
+    const data = await response.json().catch(() => ({}));
+    
+    if (!response.ok) {
+      const error = new Error(data.error || data.message || 'Something went wrong');
+      error.response = { data };
+      error.status = response.status;
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('API request failed:', error);
+    throw error;
+  }
 }
 
 export function registerUser(payload) {
@@ -25,6 +41,14 @@ export function registerUser(payload) {
 
 export function loginUser(payload) {
   return request('/api/auth/login', { method: 'POST', body: payload })
+}
+
+export function loginDoctor(payload) {
+  return request('/api/doctors/login', { method: 'POST', body: payload })
+}
+
+export function updateDoctorProfile(payload, token) {
+  return request('/api/doctors/profile', { method: 'PUT', body: payload, token })
 }
 
 export function getMe(token) {
@@ -103,6 +127,26 @@ export function createTransaction(payload, token) {
 
 export function getTransactionSummary(token) {
   return request('/api/transactions/summary', { token })
+}
+
+export function fetchDoctors(token) {
+  return request('/api/doctors', { token })
+}
+
+export function fetchDoctorById(id) {
+  return request(`/api/doctors/${id}`)
+}
+
+export function bookAppointment(doctorId, appointmentData, token) {
+  return request(`/api/doctors/${doctorId}/appointments`, {
+    method: 'POST',
+    body: appointmentData,
+    token
+  })
+}
+
+export function getDoctorAppointments(token) {
+  return request('/api/doctors/appointments', { token })
 }
 
 

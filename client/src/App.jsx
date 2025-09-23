@@ -1,9 +1,12 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import logo from './assets/agri-logo.png'
+
+// Page Components
+import Register from './pages/Register'
 import SelectRole from './pages/SelectRole'
+import DoctorDashboard from './pages/DoctorDashboard'
 import DoctorRegister from './pages/DoctorRegister'
 import CustomerRegister from './pages/CustomerRegister'
-import DoctorDashboard from './pages/DoctorDashboard'
 import Dashboard from './pages/Dashboard'
 import Agri from './pages/Agri'
 import EditProfile from './pages/EditProfile'
@@ -11,7 +14,8 @@ import SubmitReport from './pages/SubmitReport'
 import Transactions from './pages/Transactions'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
-import Register from './pages/Register'
+import CustomerLogin from './pages/CustomerLogin'
+import DoctorLogin from './pages/DoctorLogin'
 import CropHistory from './pages/CropHistory'
 import Cattle from './pages/Cattle'
 import Sell from './pages/Sell'
@@ -20,14 +24,15 @@ import Fertilizers from './pages/Fertilizers'
 import Cart from './pages/Cart'
 import CattleHistory from './pages/CattleHistory'
 import GovtSchemes from './pages/GovtSchemes'
+import DoctorEditProfile from './pages/DoctorEditProfile'
 
 export default function App() {
   const location = useLocation()
   const path = location.pathname
   const featurePrefixes = ['/profile/edit', '/reports/submit', '/transactions', '/crops/history', '/cart']
   const isFeaturePage = featurePrefixes.some((p) => path.startsWith(p))
-  const hideFooter = path === '/login' || path === '/register' || path === '/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
-  const hideHeader = path === '/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
+  const hideFooter = path === '/login' || path === '/customer-login' || path === '/doctor-login' || path === '/register' || path === '/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
+  const hideHeader = path === '/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || path === '/register' || path === '/login' || path === '/customer-login' || path === '/doctor-login' || isFeaturePage
   return (
     <div className="min-h-screen bg-agri-50 text-agri-900 flex flex-col">
       {!hideHeader && (
@@ -54,10 +59,13 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/customer-login" element={<CustomerLogin />} />
+          <Route path="/doctor-login" element={<DoctorLogin />} />
           <Route path="/register" element={<Register />} />
           <Route path="/select-role" element={<SelectRole />} />
           <Route path="/doctors/register" element={<DoctorRegister />} />
           <Route path="/doctors/dashboard" element={<DoctorDashboard />} />
+          <Route path="/doctors/profile/edit" element={<DoctorEditProfile />} />
           <Route path="/customers/register" element={<CustomerRegister />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/agri" element={<Agri />} />
