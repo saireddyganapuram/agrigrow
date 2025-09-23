@@ -15,6 +15,7 @@ const appointmentRoutes = require('./routes/appointmentRoutes');
 const cattleRoutes = require('./routes/cattleRoutes');
 const cropSoldRoutes = require('./routes/cropSoldRoutes');
 const customerPurchaseRoutes = require('./routes/customerPurchaseRoutes');
+const chatbotRoutes = require('./routes/chatbotRoutes');
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/cattle', cattleRoutes);
 app.use('/api/crop-sold', cropSoldRoutes);
 app.use('/api/customer-purchases', customerPurchaseRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // Health check route
 app.get('/', (req, res) => {

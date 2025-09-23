@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { recordCropSale } from '../lib/api'
 import logo from '../assets/agri-logo.png'
+import qrCode from '../assets/qr.png'
 import PaymentSuccess from './PaymentSuccess'
 
 export default function PaymentModal({ isOpen, onClose, cropDetails, onPaymentComplete }) {
@@ -340,92 +341,19 @@ export default function PaymentModal({ isOpen, onClose, cropDetails, onPaymentCo
                     <div className="mt-4">
                       {showScanner ? (
                         <div className="text-center py-6">
-                          <div className="w-72 h-72 bg-white rounded-xl mx-auto mb-4 flex items-center justify-center border-2 border-agri-200 shadow-inner p-4">
-                            <div className="relative">
-                              {/* QR Code Pattern - Made smaller to fit properly */}
-                              <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-sm">
-                                {/* Outer border */}
-                                <rect x="0" y="0" width="200" height="200" fill="#000000" stroke="#000" strokeWidth="3"/>
-
-                                {/* Inner white space */}
-                                <rect x="6" y="6" width="188" height="188" fill="#ffffff"/>
-
-                                {/* Corner position markers */}
-                                <g fill="#000000">
-                                  {/* Top-left corner */}
-                                  <rect x="0" y="0" width="42" height="42" fill="#ffffff"/>
-                                  <rect x="6" y="6" width="30" height="30" fill="#000000"/>
-                                  <rect x="12" y="12" width="18" height="18" fill="#ffffff"/>
-                                  <rect x="18" y="18" width="6" height="6" fill="#000000"/>
-
-                                  {/* Top-right corner */}
-                                  <rect x="158" y="0" width="42" height="42" fill="#ffffff"/>
-                                  <rect x="164" y="6" width="30" height="30" fill="#000000"/>
-                                  <rect x="170" y="12" width="18" height="18" fill="#ffffff"/>
-                                  <rect x="176" y="18" width="6" height="6" fill="#000000"/>
-
-                                  {/* Bottom-left corner */}
-                                  <rect x="0" y="158" width="42" height="42" fill="#ffffff"/>
-                                  <rect x="6" y="164" width="30" height="30" fill="#000000"/>
-                                  <rect x="12" y="170" width="18" height="18" fill="#ffffff"/>
-                                  <rect x="18" y="176" width="6" height="6" fill="#000000"/>
-                                </g>
-
-                                {/* Data pattern - simulating QR code data */}
-                                <g fill="#000000">
-                                  {/* Left data blocks */}
-                                  <rect x="48" y="48" width="6" height="6"/>
-                                  <rect x="48" y="60" width="6" height="6"/>
-                                  <rect x="48" y="72" width="6" height="6"/>
-                                  <rect x="60" y="48" width="6" height="6"/>
-                                  <rect x="60" y="72" width="6" height="6"/>
-                                  <rect x="72" y="48" width="6" height="6"/>
-                                  <rect x="72" y="60" width="6" height="6"/>
-                                  <rect x="72" y="72" width="6" height="6"/>
-
-                                  {/* Right data blocks */}
-                                  <rect x="126" y="48" width="6" height="6"/>
-                                  <rect x="126" y="60" width="6" height="6"/>
-                                  <rect x="126" y="72" width="6" height="6"/>
-                                  <rect x="138" y="48" width="6" height="6"/>
-                                  <rect x="138" y="72" width="6" height="6"/>
-                                  <rect x="150" y="48" width="6" height="6"/>
-                                  <rect x="150" y="60" width="6" height="6"/>
-                                  <rect x="150" y="72" width="6" height="6"/>
-
-                                  {/* Bottom data blocks */}
-                                  <rect x="48" y="126" width="6" height="6"/>
-                                  <rect x="60" y="126" width="6" height="6"/>
-                                  <rect x="72" y="126" width="6" height="6"/>
-                                  <rect x="48" y="138" width="6" height="6"/>
-                                  <rect x="48" y="150" width="6" height="6"/>
-                                  <rect x="72" y="138" width="6" height="6"/>
-                                  <rect x="72" y="150" width="6" height="6"/>
-
-                                  {/* Center data blocks */}
-                                  <rect x="88" y="88" width="24" height="24" fill="#ffffff"/>
-                                  <rect x="94" y="94" width="12" height="12" fill="#000000"/>
-                                  <rect x="100" y="100" width="6" height="6" fill="#ffffff"/>
-                                  <rect x="103" y="103" width="3" height="3" fill="#000000"/>
-                                </g>
-
-                                {/* Timing patterns */}
-                                <rect x="42" y="6" width="6" height="36" fill="#000000"/>
-                                <rect x="6" y="42" width="36" height="6" fill="#000000"/>
-                                <rect x="152" y="6" width="6" height="36" fill="#000000"/>
-                                <rect x="158" y="42" width="36" height="6" fill="#000000"/>
-
-                                {/* Alignment pattern */}
-                                <rect x="158" y="158" width="18" height="18" fill="#ffffff"/>
-                                <rect x="164" y="164" width="6" height="6" fill="#000000"/>
-                              </svg>
-
-                              {/* UPI Payment Info Overlay */}
-                              <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-white rounded-lg px-4 py-2 shadow-lg border border-agri-200 min-w-max">
-                                <div className="text-center">
-                                  <p className="text-sm font-semibold text-agri-900">UPI: demo@paytm</p>
-                                  <p className="text-sm text-agri-600">₹{cropDetails?.price || 0}</p>
-                                </div>
+                          <div className="max-w-sm mx-auto">
+                            {/* Simple QR Code Display */}
+                            <div className="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-200 mb-4">
+                              <div className="w-48 h-48 mx-auto bg-white rounded-lg flex items-center justify-center mb-4 p-2">
+                                <img 
+                                  src={qrCode} 
+                                  alt="QR Code" 
+                                  className="w-full h-full object-contain"
+                                />
+                              </div>
+                              <div className="text-center">
+                                <p className="font-bold text-lg text-gray-900">₹{cropDetails?.price || 0}</p>
+                                <p className="text-sm text-gray-600">UPI: agrigrow@upi</p>
                               </div>
                             </div>
                           </div>
@@ -433,12 +361,12 @@ export default function PaymentModal({ isOpen, onClose, cropDetails, onPaymentCo
                           <div className="space-y-3">
                             <button
                               onClick={() => setShowScanner(false)}
-                              className="px-4 py-2 bg-agri-600 text-white rounded-lg hover:bg-agri-700 text-sm transition-colors"
+                              className="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-sm transition-colors"
                             >
-                              Use Manual Entry
+                              Enter UPI ID Manually
                             </button>
-                            <p className="text-sm text-agri-500 text-center">
-                              📱 Point your UPI app camera at this QR code to pay
+                            <p className="text-xs text-gray-500">
+                              Scan QR code with any UPI app to pay ₹{cropDetails?.price || 0}
                             </p>
                           </div>
                         </div>
@@ -464,17 +392,42 @@ export default function PaymentModal({ isOpen, onClose, cropDetails, onPaymentCo
                   paymentMethod === 'netbanking' ? 'border-agri-500 bg-agri-50' : 'border-agri-200 hover:border-agri-300'
                 }`} onClick={() => setPaymentMethod('netbanking')}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                       🏦
                     </div>
                     <span className="font-medium text-agri-900">Net Banking</span>
                   </div>
 
                   {paymentMethod === 'netbanking' && (
-                    <div className="mt-4">
-                      <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
-                        <p className="text-sm text-orange-700 mb-2">🏦 You will be redirected to your bank's secure payment page</p>
-                        <p className="text-xs text-orange-600">Select your bank from the list after clicking Pay</p>
+                    <div className="mt-4 space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-agri-700 mb-2">Select Your Bank</label>
+                        <select className="w-full px-4 py-3 border border-agri-300 rounded-lg focus:ring-2 focus:ring-agri-400 focus:border-transparent">
+                          <option value="">Choose your bank</option>
+                          <option value="sbi">State Bank of India</option>
+                          <option value="hdfc">HDFC Bank</option>
+                          <option value="icici">ICICI Bank</option>
+                          <option value="axis">Axis Bank</option>
+                          <option value="pnb">Punjab National Bank</option>
+                          <option value="bob">Bank of Baroda</option>
+                          <option value="canara">Canara Bank</option>
+                          <option value="union">Union Bank of India</option>
+                          <option value="kotak">Kotak Mahindra Bank</option>
+                          <option value="yes">Yes Bank</option>
+                          <option value="other">Other Banks</option>
+                        </select>
+                      </div>
+                      <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                        <div className="flex items-center gap-2 text-blue-700 mb-2">
+                          <span className="text-lg">🔒</span>
+                          <span className="font-medium text-sm">Secure Banking</span>
+                        </div>
+                        <ul className="text-xs text-blue-600 space-y-1">
+                          <li>• You will be redirected to your bank's secure page</li>
+                          <li>• Login with your net banking credentials</li>
+                          <li>• Complete payment authorization</li>
+                          <li>• Return to AgriGrow for confirmation</li>
+                        </ul>
                       </div>
                     </div>
                   )}

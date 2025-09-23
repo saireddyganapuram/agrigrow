@@ -193,4 +193,31 @@ export function recordCustomerPurchase(purchaseData, token) {
   })
 }
 
+export function getChatResponse(message, token) {
+  return request('/api/chatbot/chat', {
+    method: 'POST',
+    body: { message },
+    token
+  })
+}
+
+export function uploadPdf(file, token) {
+  const formData = new FormData()
+  formData.append('pdf', file)
+  
+  return fetch(`${BASE_URL}/api/chatbot/upload-pdf`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    credentials: 'include',
+    body: formData
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to upload PDF')
+    }
+    return response.json()
+  })
+}
+
 
