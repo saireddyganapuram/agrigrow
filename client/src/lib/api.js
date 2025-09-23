@@ -22,7 +22,7 @@ export async function request(path, options = {}) {
     const data = await response.json().catch(() => ({}));
     
     if (!response.ok) {
-      const error = new Error(data.error || data.message || 'Something went wrong');
+      const error = new Error(data.error || data.details?.[0]?.msg || data.message || 'Something went wrong');
       error.response = { data };
       error.status = response.status;
       throw error;
