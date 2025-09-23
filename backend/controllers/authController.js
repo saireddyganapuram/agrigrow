@@ -12,7 +12,10 @@ function generateToken(user) {
 exports.register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({
+      error: 'Validation failed',
+      details: errors.array()
+    });
   }
 
   const { name, email, username, phone, address, password } = req.body;
@@ -35,7 +38,7 @@ exports.register = async (req, res) => {
       token,
     });
   } catch (err) {
-    console.error(err);
+    console.error('Registration error:', err);
     return res.status(500).json({ error: 'Failed to register user' });
   }
 };
