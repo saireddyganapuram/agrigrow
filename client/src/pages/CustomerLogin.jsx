@@ -23,7 +23,7 @@ export default function CustomerLogin() {
       .then((data) => {
         localStorage.setItem('token', data.token)
         localStorage.setItem('user', JSON.stringify(data.user))
-        navigate('/dashboard')
+        navigate('/customers/dashboard')
       })
       .catch((err) => setError(err.message || 'Login failed'))
       .finally(() => setLoading(false))

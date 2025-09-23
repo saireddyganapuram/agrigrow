@@ -32,8 +32,8 @@ export default function App() {
   const path = location.pathname
   const featurePrefixes = ['/profile/edit', '/reports/submit', '/transactions', '/crops/history', '/cart']
   const isFeaturePage = featurePrefixes.some((p) => path.startsWith(p))
-  const hideFooter = path === '/login' || path === '/customer-login' || path === '/doctor-login' || path === '/register' || path === '/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
-  const hideHeader = path === '/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || path === '/register' || path === '/login' || path === '/customer-login' || path === '/doctor-login' || isFeaturePage
+  const hideFooter = path === '/login' || path === '/customer-login' || path === '/doctor-login' || path === '/register' || path === '/dashboard' || path === '/customers/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || isFeaturePage
+  const hideHeader = path === '/dashboard' || path === '/customers/dashboard' || path === '/doctors/dashboard' || path.startsWith('/agri') || path === '/cattle' || path === '/cattle-history' || path === '/govt-schemes' || path === '/select-role' || path.startsWith('/doctors') || path.startsWith('/customers') || path === '/register' || path === '/login' || path === '/customer-login' || path === '/doctor-login' || isFeaturePage
   return (
     <div className="min-h-screen bg-agri-50 text-agri-900 flex flex-col">
       {!hideHeader && (
@@ -68,7 +68,8 @@ export default function App() {
           <Route path="/doctors/dashboard" element={<DoctorDashboard />} />
           <Route path="/doctors/profile/edit" element={<DoctorEditProfile />} />
           <Route path="/customers/register" element={<CustomerRegister />} />
-          <Route path="/dashboard" element={<CustomerDashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/customers/dashboard" element={<CustomerDashboard />} />
           <Route path="/agri" element={<Agri />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/reports/submit" element={<SubmitReport />} />
