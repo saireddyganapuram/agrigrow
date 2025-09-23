@@ -349,6 +349,11 @@ export default function DoctorDashboard() {
                 label="Edit Profile" 
                 emoji="✏️" 
               />
+              <PanelLink 
+                onClick={() => { setPanelOpen(false); navigate('/doctors/appointments') }} 
+                label="Appointment History" 
+                emoji="📅" 
+              />
             </nav>
           </div>
         </div>

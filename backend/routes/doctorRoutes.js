@@ -82,6 +82,18 @@ router.patch(
   appointmentController.updateAppointmentStatus
 );
 
+// Book appointment with doctor (user only)
+router.post(
+  '/:doctorId/appointments',
+  auth,
+  [
+    body('date').isISO8601().withMessage('Valid date required'),
+    body('time').matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/).withMessage('Valid time required (HH:MM format)'),
+    body('reason').isString().isLength({ min: 5 }).withMessage('Reason is required (min 5 characters)')
+  ],
+  appointmentController.bookAppointment
+);
+
 // Get doctor by ID
 router.get('/:id', auth, doctorController.getDoctorById);
 

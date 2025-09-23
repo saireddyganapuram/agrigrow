@@ -168,7 +168,8 @@ export default function Fertilizers() {
                       crop: modal.fertilizer.name, 
                       company: modal.fertilizer.companies[0], 
                       pricePerUnit: 150, 
-                      quantity: qty 
+                      quantity: qty,
+                      imageUrl: modal.imageUrl
                     }, token)
                       .then(() => {
                         setAddSuccess('Item successfully added to cart')

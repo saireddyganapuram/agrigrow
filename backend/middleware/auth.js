@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Doctor = require('../models/Doctor');
 const User = require('../models/User');
+const Customer = require('../models/Customer');
 
 module.exports = async function (req, res, next) {
   const authHeader = req.headers.authorization || '';
@@ -14,11 +15,12 @@ module.exports = async function (req, res, next) {
     const secret = process.env.JWT_SECRET || 'dev_secret_change_me';
     const decoded = jwt.verify(token, secret);
     
-    // Check if the user exists in either the Doctor or User collection
+    // Check if the user exists in Doctor, User, or Customer collection
     const doctor = await Doctor.findById(decoded.id);
     const user = await User.findById(decoded.id);
+    const customer = await Customer.findById(decoded.id);
     
-    if (!doctor && !user) {
+    if (!doctor && !user && !customer) {
       return res.status(401).json({ error: 'User not found' });
     }
     

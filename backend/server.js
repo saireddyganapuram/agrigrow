@@ -12,6 +12,9 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const customerRoutes = require('./routes/customerRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const cattleRoutes = require('./routes/cattleRoutes');
+const cropSoldRoutes = require('./routes/cropSoldRoutes');
+const customerPurchaseRoutes = require('./routes/customerPurchaseRoutes');
 
 dotenv.config();
 
@@ -37,6 +40,9 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api', appointmentRoutes); // Keep appointments at /api first
 app.use('/api/doctors', doctorRoutes); // Then doctors
 app.use('/api/customers', customerRoutes);
+app.use('/api/cattle', cattleRoutes);
+app.use('/api/crop-sold', cropSoldRoutes);
+app.use('/api/customer-purchases', customerPurchaseRoutes);
 
 // Health check route
 app.get('/', (req, res) => {

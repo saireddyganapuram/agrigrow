@@ -61,17 +61,18 @@ const DoctorEditProfile = () => {
 
         // Try to fetch from API first
         try {
-          const doctor = await request('/api/doctors/me', { token });
-          localStorage.setItem('doctor', JSON.stringify(doctor));
+          const response = await request('/api/doctors/me', { token });
+          const doctorData = response.doctor;
+          localStorage.setItem('doctor', JSON.stringify(doctorData));
           setFormData({
-            fullname: doctor.fullname || '',
-            email: doctor.email || '',
-            phone: doctor.phone || '',
-            address: doctor.address || '',
-            qualification: doctor.qualification || '',
-            specialization: doctor.specialization || '',
-            experience: doctor.experience || '',
-            licenseNumber: doctor.licenseNumber || ''
+            fullname: doctorData.fullname || '',
+            email: doctorData.email || '',
+            phone: doctorData.phone || '',
+            address: doctorData.address || '',
+            qualification: doctorData.qualification || '',
+            specialization: doctorData.specialization || '',
+            experience: doctorData.experience || '',
+            licenseNumber: doctorData.licenseNumber || ''
           });
         } catch (apiError) {
           console.warn('Could not fetch doctor data from API, using local storage', apiError);
@@ -123,7 +124,8 @@ const DoctorEditProfile = () => {
       }
 
       // Call the API to update the doctor's profile
-      const updatedDoctor = await updateDoctorProfile(formData, token);
+      const response = await updateDoctorProfile(formData, token);
+      const updatedDoctor = response.doctor;
       
       // Update local storage with the updated doctor data
       localStorage.setItem('doctor', JSON.stringify(updatedDoctor));

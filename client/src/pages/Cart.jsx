@@ -39,14 +39,10 @@ export default function Cart() {
   // Fertilizer images mapping
   const fertilizerImages = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13]
 
-  // Function to get image for cart item
+  // Function to get image for cart item (only for fertilizers)
   const getItemImage = (item) => {
-    if (item.imageUrl) {
-      return item.imageUrl
-    }
-    // If no imageUrl, use a default image based on item index
-    const index = items.findIndex(i => i._id === item._id)
-    return fertilizerImages[index % fertilizerImages.length]
+    // Only return image if item has imageUrl (fertilizers)
+    return item.imageUrl || null
   }
 
   const loadCart = () => {
@@ -115,51 +111,41 @@ export default function Cart() {
     setPaymentStep(3)
     setProcessing(true)
     
-    try {
-      const token = localStorage.getItem('token')
-      if (!token) {
-        alert('Please login first')
-        return
+    // Simulate processing delay
+    setTimeout(async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          alert('Please login first')
+          setProcessing(false)
+          setPaymentStep(2)
+          return
+        }
+
+        // Generate transaction ID
+        const transactionId = `TXN${Date.now()}${Math.random().toString(36).substr(2, 9)}`
+        
+        // Call payment API
+        await completePayment({
+          paymentMethod,
+          transactionId
+        }, token)
+
+        setProcessing(false)
+        setPaymentStep(4)
+        
+        // Redirect to agri home after success
+        setTimeout(() => {
+          window.location.href = '/agri'
+        }, 2000)
+        
+      } catch (error) {
+        console.error('Payment error:', error)
+        setProcessing(false)
+        setPaymentStep(2)
+        alert('Payment failed. Please try again.')
       }
-
-      // Generate transaction ID
-      const transactionId = `TXN${Date.now()}${Math.random().toString(36).substr(2, 9)}`
-      
-      // Complete payment via API
-      await completePayment({
-        paymentMethod,
-        transactionId
-      }, token)
-
-      setProcessing(false)
-      setPaymentStep(4)
-      
-      // Clear cart and reset after successful payment
-      setTimeout(() => {
-        setShowPayment(false)
-        setPaymentStep(1)
-        setPaymentMethod('')
-        setUpiMethod('')
-        setPaymentDetails({
-          cardNumber: '',
-          expiryDate: '',
-          cvv: '',
-          name: '',
-          upiId: '',
-          phone: ''
-        })
-        // Clear cart from frontend
-        setItems([])
-        // Reload cart to ensure it's empty
-        loadCart()
-      }, 3000)
-      
-    } catch (error) {
-      console.error('Payment failed:', error)
-      setProcessing(false)
-      setPaymentStep(2)
-      alert('Payment failed. Please try again.')
-    }
+    }, 1500)
   }
 
   const resetPayment = () => {
@@ -199,13 +185,17 @@ export default function Cart() {
           {error && <p className="text-red-600">{error}</p>}
           {items.map((i) => (
             <div key={i._id} className="flex items-center gap-4 rounded-lg border border-agri-200 bg-white p-4 shadow-sm">
-              {/* Item Image */}
+              {/* Item Image - Only for fertilizers */}
               <div className="w-16 h-16 rounded-lg border border-agri-200 bg-agri-50 flex items-center justify-center overflow-hidden flex-shrink-0">
-                <img 
-                  src={getItemImage(i)} 
-                  alt={i.crop}
-                  className="max-h-full max-w-full object-contain"
-                />
+                {getItemImage(i) ? (
+                  <img 
+                    src={getItemImage(i)} 
+                    alt={i.crop}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                ) : (
+                  <span className="text-2xl">🌱</span>
+                )}
               </div>
               
               {/* Item Details */}
@@ -554,8 +544,8 @@ export default function Cart() {
                   </div>
                   <h4 className="text-xl font-semibold text-agri-900 mb-2">Payment Successful!</h4>
                   <p className="text-agri-600 mb-4">Your order has been placed successfully.</p>
-                  <p className="text-sm text-agri-500">Transaction ID: TXN{Date.now()}</p>
-                  <p className="text-sm text-agri-500 mt-2">Redirecting to home...</p>
+                  <p className="text-agri-600 mb-4">Items have been added to your purchase history.</p>
+                  <p className="text-sm text-agri-500 mt-2">Redirecting to AgriGrow home...</p>
                 </div>
               )}
             </div>

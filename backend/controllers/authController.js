@@ -27,7 +27,15 @@ exports.register = async (req, res) => {
     }
 
     const passwordHash = await User.hashPassword(password);
-    const user = await User.create({ name, email, username, phone, address, passwordHash });
+    const user = await User.create({ 
+      name, 
+      fullname: name, // Map name to fullname for User model
+      email, 
+      username, 
+      phone, 
+      address, 
+      passwordHash 
+    });
 
     const token = generateToken(user);
     return res.status(201).json({

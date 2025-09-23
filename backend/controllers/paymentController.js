@@ -9,75 +9,94 @@ exports.completePayment = async (req, res) => {
     const userId = req.user?.id
     const { paymentMethod, transactionId } = req.body
 
-    console.log('Payment completion request:', { userId, paymentMethod, transactionId })
-
     if (!userId) {
-      console.log('No user ID provided')
       return res.status(401).json({ error: 'User not authenticated' })
     }
 
     // Get user details
-    const User = require('../models/User')
     const user = await User.findById(userId).select('name username fullname')
     if (!user) {
-      console.log('User not found')
       return res.status(404).json({ error: 'User not found' })
     }
 
     const userName = user.fullname || user.name || user.username || 'Unknown User'
-    console.log('User found:', userName)
 
-    // For demo purposes, always succeed even if transaction doesn't exist
-    try {
-      const transaction = await Transaction.findOne({
-        transactionId: { $regex: `^${transactionId}` },
-        farmerId: userId
+    // Get cart items
+    const cartItems = await CartItem.find({ userId })
+    
+    // For demo: if no cart items, create a demo transaction
+    if (cartItems.length === 0) {
+      await Transaction.create({
+        farmerId: userId,
+        farmerName: userName,
+        transactionId,
+        type: 'purchase',
+        description: 'Demo payment - no items',
+        amount: 0,
+        paymentMethod,
+        status: 'completed',
+        relatedItems: []
       })
-
-      if (!transaction) {
-        console.log('Transaction not found, creating demo transaction record')
-        // Create a demo transaction record
-        await Transaction.create({
-          farmerId: userId,
-          farmerName: userName,
-          transactionId,
-          type: 'sale',
-          description: 'Demo payment completion',
-          amount: 0,
-          paymentMethod: paymentMethod || 'demo',
-          status: 'completed',
-          notes: 'Demo mode payment completion'
-        })
-      } else {
-        console.log('Transaction found, updating...')
-        // Update transaction with payment method and status
-        transaction.paymentMethod = paymentMethod || 'demo'
-        transaction.status = 'completed'
-        transaction.notes = `Payment completed via ${paymentMethod || 'demo'} - ${transaction.notes || ''}`
-        await transaction.save()
-      }
-    } catch (dbError) {
-      console.log('Database error, continuing with demo success:', dbError.message)
-      // For demo, still return success even if DB fails
+      
+      return res.json({
+        message: 'Payment completed successfully (Demo)',
+        transactionId,
+        totalAmount: 0,
+        status: 'completed'
+      })
     }
 
-    console.log('Payment completion successful (Demo Mode)')
-    return res.json({
-      message: 'Payment completed successfully (Demo Mode)',
+    // Calculate total amount
+    const totalAmount = cartItems.reduce((sum, item) => sum + (item.pricePerUnit * item.quantity), 0)
+
+    // Create ItemBought records one by one to avoid conflicts
+    for (const item of cartItems) {
+      await ItemBought.create({
+        userId,
+        farmerName: userName,
+        crop: item.crop,
+        company: item.company,
+        pricePerUnit: item.pricePerUnit,
+        quantity: item.quantity,
+        totalAmount: item.pricePerUnit * item.quantity,
+        imageUrl: item.imageUrl,
+        transactionId: `${transactionId}_${item._id}`, // Unique transaction ID per item
+        paymentMethod
+      })
+    }
+
+    // Create transaction record
+    const relatedItems = cartItems.map(item => ({
+      itemName: `${item.crop} - ${item.company}`,
+      quantity: item.quantity,
+      pricePerUnit: item.pricePerUnit
+    }))
+
+    await Transaction.create({
+      farmerId: userId,
+      farmerName: userName,
       transactionId,
-      totalAmount: 0,
+      type: 'purchase',
+      description: `Purchase of ${cartItems.length} items`,
+      amount: totalAmount,
+      paymentMethod,
+      status: 'completed',
+      relatedItems
+    })
+
+    // Clear cart after successful payment
+    await CartItem.deleteMany({ userId })
+
+    return res.json({
+      message: 'Payment completed successfully',
+      transactionId,
+      totalAmount,
       status: 'completed'
     })
 
   } catch (err) {
     console.error('Payment completion error:', err)
-    // For demo, even if there's an error, return success
-    return res.status(200).json({
-      message: 'Payment completed successfully (Demo Mode - Error occurred)',
-      transactionId: req.body.transactionId || 'DEMO_TXN',
-      totalAmount: 0,
-      status: 'completed'
-    })
+    return res.status(500).json({ error: 'Payment processing failed' })
   }
 }
 

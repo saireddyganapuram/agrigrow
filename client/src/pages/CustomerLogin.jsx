@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { loginUser } from '../lib/api'
+import { loginCustomer } from '../lib/api'
 import { useNavigate, Link } from 'react-router-dom'
 import logo from '../assets/agri-logo.png'
 
@@ -19,10 +19,10 @@ export default function CustomerLogin() {
       ? { email: identifier, password }
       : { username: identifier, password }
 
-    loginUser(payload)
+    loginCustomer(payload)
       .then((data) => {
         localStorage.setItem('token', data.token)
-        localStorage.setItem('user', JSON.stringify(data.user))
+        localStorage.setItem('user', JSON.stringify(data.customer))
         navigate('/customers/dashboard')
       })
       .catch((err) => setError(err.message || 'Login failed'))
