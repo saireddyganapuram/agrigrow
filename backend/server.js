@@ -11,13 +11,19 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const customerRoutes = require('./routes/customerRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
 
 dotenv.config();
 
 const app = express();
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  credentials: true,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Mount routes early so they are available immediately
@@ -28,7 +34,8 @@ app.use('/api/fertilizers', fertilizersRoutes);
 app.use('/api/crop-listings', cropListingRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/transactions', transactionRoutes);
-app.use('/api/doctors', doctorRoutes);
+app.use('/api', appointmentRoutes); // Keep appointments at /api first
+app.use('/api/doctors', doctorRoutes); // Then doctors
 app.use('/api/customers', customerRoutes);
 
 // Health check route
@@ -42,7 +49,10 @@ connectToDatabase()
     console.log('Connected to MongoDB');
   })
   .catch((err) => {
-    console.error('Failed to connect to MongoDB', err);
+    console.error('Failed to connect to MongoDB:', err.message);
+    console.log('Please ensure MongoDB is running on your system');
+    console.log('To install MongoDB, visit: https://www.mongodb.com/try/download/community');
+    console.log('Or use MongoDB Atlas: https://www.mongodb.com/cloud/atlas');
   });
 
 // 404 handler

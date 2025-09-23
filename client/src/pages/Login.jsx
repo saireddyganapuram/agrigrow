@@ -37,7 +37,7 @@ export default function Login() {
         <div className="absolute inset-0 bg-no-repeat bg-contain bg-center opacity-30" style={{ backgroundImage: `url(${logo})` }} />
         <div className="relative z-10 w-[85%] sm:w-[75%] max-w-md">
           <div className="p-0">
-            <h2 className="text-center text-2xl md:text-3xl font-extrabold text-agri-900">Login</h2>
+            <h2 className="text-center text-2xl md:text-3xl font-bold text-agri-600">Login</h2>
             <form onSubmit={onSubmit} className="mt-6 md:mt-8 space-y-4 md:space-y-5">
               <div className="text-center">
                 <label className="block text-sm md:text-base font-medium text-agri-700">Email or Username</label>

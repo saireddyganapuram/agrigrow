@@ -15,7 +15,7 @@ exports.register = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { fullname, email, username, phone, address, password, qualification, specialization, experience, licenseNumber } = req.body;
+  const { fullname, email, username, phone, address, password, qualification, specialization, experience, licenseNumber, confirmPassword } = req.body;
 
   try {
     const existing = await Doctor.findOne({ $or: [{ email }, { username }] });
@@ -106,13 +106,17 @@ exports.login = async (req, res) => {
 
 exports.getMe = async (req, res) => {
   try {
+    if (req.user.type !== 'doctor') {
+      return res.status(403).json({ error: 'Access denied. Doctor account required.' });
+    }
+    
     const doctor = await Doctor.findById(req.user.id).select('-passwordHash');
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });
     }
     return res.json({ doctor });
   } catch (err) {
-    console.error(err);
+    console.error('Error in getMe:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 };

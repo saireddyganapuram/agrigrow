@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { registerUser } from '../lib/api'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import logo from '../assets/agri-logo.png'
 
 export default function Register() {
   const [step, setStep] = useState(1)
@@ -53,8 +54,22 @@ export default function Register() {
   }
 
   return (
-    <section className="max-w-2xl mx-auto px-4 py-16">
-      <h2 className="text-2xl font-bold text-agri-900">Create your account</h2>
+    <div className="min-h-screen bg-agri-50">
+      {/* Navigation Bar */}
+      <header className="border-b border-agri-200 bg-white/80 backdrop-blur sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-3 font-semibold text-2xl text-agri-900">
+            <img src={logo} alt="AgriGrow" className="w-10 h-10" />
+            AgriGrow
+          </Link>
+          <nav className="flex items-center gap-4 text-base">
+            <Link to="/login" className="px-3 py-1.5 rounded-md bg-agri-600 text-white hover:bg-agri-700">Login</Link>
+          </nav>
+        </div>
+      </header>
+
+      <section className="max-w-2xl mx-auto px-4 py-16">
+        <h2 className="text-2xl font-bold text-agri-900">Create your account</h2>
 
       {step === 1 && (
         <form onSubmit={onNext} className="mt-6 grid md:grid-cols-2 gap-4">
@@ -113,7 +128,8 @@ export default function Register() {
           </div>
         </form>
       )}
-    </section>
+      </section>
+    </div>
   )
 }
 

@@ -42,9 +42,6 @@ export default function SelectRole() {
             AgriGrow
           </Link>
           <div className="flex-1" />
-          <div className="flex items-center gap-3 ml-auto pr-0">
-            <Link to="/login" className="px-4 py-2 rounded-full border border-agri-400 bg-white hover:bg-agri-100 text-agri-800 text-base md:text-lg">Login</Link>
-          </div>
         </div>
       </header>
 
@@ -63,8 +60,8 @@ export default function SelectRole() {
             </div>
             <div className="w-full max-w-xs flex justify-center order-first md:order-none">
               <Card
-                title="Doctor"
-                description="Provide healthcare services and manage patient records"
+                title="Veterinary Doctor"
+                description="Provide veterinary care for livestock and manage animal health records"
                 icon="👨‍⚕️"
                 ghost
                 onClick={() => navigate('/doctors/register')}
@@ -73,7 +70,7 @@ export default function SelectRole() {
             <div className="w-full max-w-xs flex justify-center">
               <Card
                 title="Customer"
-                description="Access healthcare services and manage your medical records"
+                description="Your food, straight from the farm to your door."
                 icon="👤"
                 ghost
                 onClick={() => navigate('/customers/register')}
