@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { request } from '../lib/api'
 import logo from '../assets/agri-logo.png'
 import PaymentModal from '../components/PaymentModal'
 
@@ -25,16 +26,19 @@ export default function CustomerDashboard() {
     const token = localStorage.getItem('token')
     if (!token) return
 
-    setLoadingMe(true)
-    fetch('/api/customers/me', {
-      headers: {
-        'Authorization': `Bearer ${token}`
+    const fetchProfile = async () => {
+      try {
+        setLoadingMe(true)
+        const response = await request('/api/customers/me', { token })
+        setMe(response.customer)
+      } catch (error) {
+        console.error('Error fetching profile:', error)
+      } finally {
+        setLoadingMe(false)
       }
-    })
-      .then(res => res.json())
-      .then(data => setMe(data.customer))
-      .catch(() => {})
-      .finally(() => setLoadingMe(false))
+    }
+
+    fetchProfile()
   }, [panelOpen])
 
   useEffect(() => {
@@ -184,24 +188,72 @@ export default function CustomerDashboard() {
               </button>
             </div>
 
-            <div className="space-y-3 text-sm">
-              {loadingMe && <p className="text-agri-700">Loading...</p>}
-              {!loadingMe && me && (
-                <>
-                  <div><span className="font-medium">Name:</span> {me.fullname}</div>
-                  <div><span className="font-medium">Email:</span> {me.email}</div>
-                  <div><span className="font-medium">Username:</span> {me.username}</div>
-                  <div><span className="font-medium">Phone:</span> {me.phone}</div>
-                  <div><span className="font-medium">Address:</span> {me.address}</div>
-                  {me.gender && <div><span className="font-medium">Gender:</span> {me.gender}</div>}
-                </>
-              )}
-              {!loadingMe && !me && (
-                <div className="text-agri-600 text-center py-4">
-                  <p>No profile data available</p>
+            {loadingMe ? (
+              <div className="flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-agri-500"></div>
+              </div>
+            ) : me ? (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-agri-100 flex items-center justify-center">
+                    <span className="text-xl">👤</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-agri-900">{me.fullname}</h4>
+                    <p className="text-sm text-agri-600">Customer</p>
+                  </div>
                 </div>
-              )}
-            </div>
+                
+                <div className="space-y-3 text-sm border-t border-agri-200 pt-4">
+                  <div className="flex justify-between">
+                    <span className="font-medium text-agri-700">Email:</span>
+                    <span className="text-agri-900">{me.email}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium text-agri-700">Username:</span>
+                    <span className="text-agri-900">{me.username}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium text-agri-700">Phone:</span>
+                    <span className="text-agri-900">{me.phone}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium text-agri-700">Address:</span>
+                    <span className="text-agri-900 text-right max-w-48">{me.address}</span>
+                  </div>
+                  {me.gender && (
+                    <div className="flex justify-between">
+                      <span className="font-medium text-agri-700">Gender:</span>
+                      <span className="text-agri-900">{me.gender}</span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="mt-6 pt-4 border-t border-agri-200">
+                  <button
+                    onClick={() => {
+                      setPanelOpen(false)
+                      navigate('/customers/purchase-history')
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 bg-agri-100 hover:bg-agri-200 rounded-lg transition-colors"
+                  >
+                    <span className="text-xl">📋</span>
+                    <span className="font-medium text-agri-900">Purchase History</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <div className="text-4xl mb-2">⚠️</div>
+                <p className="text-agri-600">Failed to load profile data</p>
+                <button 
+                  onClick={() => setPanelOpen(false)}
+                  className="mt-2 text-agri-700 hover:text-agri-900 underline"
+                >
+                  Close
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

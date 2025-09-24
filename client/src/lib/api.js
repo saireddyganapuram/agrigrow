@@ -1,5 +1,5 @@
 // The base URL is now handled by Vite's proxy in development
-const BASE_URL = import.meta.env.VITE_API_URL || ''
+const BASE_URL = import.meta.env.VITE_API_URL
 
 export async function request(path, options = {}) {
   const { body, token, ...rest } = options;
@@ -22,7 +22,7 @@ export async function request(path, options = {}) {
     const data = await response.json().catch(() => ({}));
     
     if (!response.ok) {
-      const error = new Error(data.error || data.message || 'Something went wrong');
+      const error = new Error(data.error || data.details?.[0]?.msg || data.message || 'Something went wrong');
       error.response = { data };
       error.status = response.status;
       throw error;
@@ -45,6 +45,10 @@ export function loginUser(payload) {
 
 export function loginDoctor(payload) {
   return request('/api/doctors/login', { method: 'POST', body: payload })
+}
+
+export function loginCustomer(payload) {
+  return request('/api/customers/login', { method: 'POST', body: payload })
 }
 
 export function updateDoctorProfile(payload, token) {
@@ -147,6 +151,46 @@ export function bookAppointment(doctorId, appointmentData, token) {
 
 export function getDoctorAppointments(token) {
   return request('/api/doctors/appointments', { token })
+}
+
+export function getCattle(token) {
+  return request('/api/cattle', { token })
+}
+
+export function addCattle(payload, token) {
+  return request('/api/cattle', { method: 'POST', body: payload, token })
+}
+
+export function updateCattle(id, payload, token) {
+  return request(`/api/cattle/${id}`, { method: 'PUT', body: payload, token })
+}
+
+export function deleteCattle(id, token) {
+  return request(`/api/cattle/${id}`, { method: 'DELETE', token })
+}
+
+export function recordCropSale(cropListingId, quantity, transactionId, paymentMethod, token) {
+  return request('/api/crop-sold/record', {
+    method: 'POST',
+    body: { cropListingId, quantity, transactionId, paymentMethod },
+    token
+  })
+}
+
+export function getFarmerSales(token) {
+  return request('/api/crop-sold/farmer-sales', { token })
+}
+
+export function getCustomerPurchaseHistory(token) {
+  return request('/api/customer-purchases/history', { token })
+}
+
+export function recordCustomerPurchase(purchaseData, token) {
+  return request('/api/customer-purchases/record', {
+    method: 'POST',
+    body: purchaseData,
+    token
+  })
 }
 
 

@@ -26,6 +26,8 @@ import CattleHistory from './pages/CattleHistory'
 import GovtSchemes from './pages/GovtSchemes'
 import CustomerDashboard from './pages/CustomerDashboard'
 import DoctorEditProfile from './pages/DoctorEditProfile'
+import DoctorAppointments from './pages/DoctorAppointments'
+import CustomerPurchaseHistory from './pages/CustomerPurchaseHistory'
 
 export default function App() {
   const location = useLocation()
@@ -67,9 +69,11 @@ export default function App() {
           <Route path="/doctors/register" element={<DoctorRegister />} />
           <Route path="/doctors/dashboard" element={<DoctorDashboard />} />
           <Route path="/doctors/profile/edit" element={<DoctorEditProfile />} />
+          <Route path="/doctors/appointments" element={<DoctorAppointments />} />
           <Route path="/customers/register" element={<CustomerRegister />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/customers/dashboard" element={<CustomerDashboard />} />
+          <Route path="/customers/purchase-history" element={<CustomerPurchaseHistory />} />
           <Route path="/agri" element={<Agri />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/reports/submit" element={<SubmitReport />} />

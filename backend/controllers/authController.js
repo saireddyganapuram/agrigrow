@@ -12,7 +12,10 @@ function generateToken(user) {
 exports.register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({
+      error: 'Validation failed',
+      details: errors.array()
+    });
   }
 
   const { name, email, username, phone, address, password } = req.body;
@@ -27,7 +30,15 @@ exports.register = async (req, res) => {
     }
 
     const passwordHash = await User.hashPassword(password);
-    const user = await User.create({ name, email, username, phone, address, passwordHash });
+    const user = await User.create({ 
+      name, 
+      fullname: name, // Map name to fullname for User model
+      email, 
+      username, 
+      phone, 
+      address, 
+      passwordHash 
+    });
 
     const token = generateToken(user);
     return res.status(201).json({
@@ -35,7 +46,7 @@ exports.register = async (req, res) => {
       token,
     });
   } catch (err) {
-    console.error(err);
+    console.error('Registration error:', err);
     return res.status(500).json({ error: 'Failed to register user' });
   }
 };

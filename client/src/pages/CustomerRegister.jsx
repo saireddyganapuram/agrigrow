@@ -84,7 +84,7 @@ export default function CustomerRegister() {
 
       localStorage.setItem('token', data.token)
       localStorage.setItem('user', JSON.stringify(data.customer))
-      navigate('/dashboard')
+      navigate('/customers/dashboard')
     } catch (err) {
       console.error('Registration error:', err)
       setError(err.message || 'Registration failed')

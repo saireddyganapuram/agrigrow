@@ -1,19 +1,9 @@
 const mongoose = require('mongoose');
 
-const cropSoldSchema = new mongoose.Schema({
+const customerPurchaseSchema = new mongoose.Schema({
   customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Customer',
-    required: true
-  },
-  farmer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  cropListing: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'CropListing',
     required: true
   },
   cropName: {
@@ -24,17 +14,14 @@ const cropSoldSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  customerName: {
-    type: String,
-    required: true
-  },
   quantity: {
     type: Number,
     required: true
   },
   unit: {
     type: String,
-    required: true
+    required: true,
+    default: 'kg'
   },
   pricePerUnit: {
     type: Number,
@@ -44,17 +31,26 @@ const cropSoldSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  transactionId: {
+    type: String,
+    required: true
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['card', 'upi', 'netbanking'],
+    required: true
+  },
   purchaseDate: {
     type: Date,
     default: Date.now
   },
   status: {
     type: String,
-    enum: ['completed', 'cancelled'],
+    enum: ['completed', 'pending', 'cancelled'],
     default: 'completed'
   }
 }, { timestamps: true });
 
-const CropSold = mongoose.model('CropSold', cropSoldSchema);
+const CustomerPurchase = mongoose.model('CustomerPurchase', customerPurchaseSchema);
 
-module.exports = CropSold;
+module.exports = CustomerPurchase;

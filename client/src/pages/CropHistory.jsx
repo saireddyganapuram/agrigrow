@@ -65,10 +65,8 @@ export default function CropHistory() {
   }, [])
 
   const getItemImage = (item, index) => {
-    if (item.imageUrl) {
-      return item.imageUrl
-    }
-    return fertilizerImages[index % fertilizerImages.length]
+    // Only return image if item has imageUrl (fertilizers)
+    return item.imageUrl || null
   }
 
   const handleClearPurchaseHistory = async () => {
@@ -145,11 +143,15 @@ export default function CropHistory() {
                   <div key={item._id} className="rounded-lg border border-agri-200 bg-white p-4 shadow-sm">
                     <div className="flex items-start gap-3">
                       <div className="w-12 h-12 rounded-lg border border-agri-200 bg-agri-50 flex items-center justify-center overflow-hidden flex-shrink-0">
-                        <img 
-                          src={getItemImage(item, i)} 
-                          alt={item.crop}
-                          className="max-h-full max-w-full object-contain"
-                        />
+                        {getItemImage(item, i) ? (
+                          <img 
+                            src={getItemImage(item, i)} 
+                            alt={item.crop}
+                            className="max-h-full max-w-full object-contain"
+                          />
+                        ) : (
+                          <span className="text-xl">🌱</span>
+                        )}
                       </div>
                       <div className="flex-1">
                         <p className="font-semibold text-agri-900">{item.crop}</p>
@@ -181,11 +183,15 @@ export default function CropHistory() {
                   <div key={item._id} className="rounded-lg border border-agri-200 bg-white p-4 shadow-sm">
                     <div className="flex items-start gap-3">
                       <div className="w-12 h-12 rounded-lg border border-agri-200 bg-agri-50 flex items-center justify-center overflow-hidden flex-shrink-0">
-                        <img 
-                          src={getItemImage(item, i)} 
-                          alt={item.crop}
-                          className="max-h-full max-w-full object-contain"
-                        />
+                        {getItemImage(item, i) ? (
+                          <img 
+                            src={getItemImage(item, i)} 
+                            alt={item.crop}
+                            className="max-h-full max-w-full object-contain"
+                          />
+                        ) : (
+                          <span className="text-xl">🌱</span>
+                        )}
                       </div>
                       <div className="flex-1">
                         <p className="font-semibold text-agri-900">{item.crop}</p>

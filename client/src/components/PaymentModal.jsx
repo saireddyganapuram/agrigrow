@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { recordCropSale } from '../lib/api'
 import logo from '../assets/agri-logo.png'
 import PaymentSuccess from './PaymentSuccess'
 
@@ -130,6 +131,14 @@ export default function PaymentModal({ isOpen, onClose, cropDetails, onPaymentCo
           paymentResult = { message: 'Transaction completed (Demo Mode)' }
         }
 
+        // Record complete purchase (crop sold + customer purchase + remove listing)
+        try {
+          await recordCropSale(cropDetails._id, 1, transactionId, paymentMethod, token)
+          console.log('Purchase completed successfully')
+        } catch (purchaseError) {
+          console.log('Failed to complete purchase:', purchaseError)
+        }
+
         // Store purchase data for success page
         setPurchaseData({
           ...cropDetails,
@@ -144,8 +153,16 @@ export default function PaymentModal({ isOpen, onClose, cropDetails, onPaymentCo
         // Even if API fails, show success for demo
         console.log('API error but showing demo success:', apiError)
 
-        // Store purchase data for success page
+        // Record complete purchase (crop sold + customer purchase + remove listing)
         const transactionId = `TXN${Date.now()}${Math.random().toString(36).substr(2, 9)}`
+        try {
+          await recordCropSale(cropDetails._id, 1, transactionId, paymentMethod, token)
+          console.log('Purchase completed successfully')
+        } catch (purchaseError) {
+          console.log('Failed to complete purchase:', purchaseError)
+        }
+
+        // Store purchase data for success page
         setPurchaseData({
           ...cropDetails,
           transactionId,

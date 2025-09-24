@@ -13,7 +13,7 @@ router.post(
     body('phone').isString().isLength({ min: 7 }).withMessage('Phone is required'),
     body('address').isString().isLength({ min: 5 }).withMessage('Address is required'),
     body('username').isString().isLength({ min: 3 }).withMessage('Username is required'),
-    body('password').isLength({ min: 6 }).withMessage('Password min length 6'),
+    body('password').isLength({ min: 4 }).withMessage('Password min length 4'),
     body('confirmPassword').custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error('Passwords do not match');
@@ -31,7 +31,7 @@ router.post(
       body('email').isEmail(),
       body('username').isString().isLength({ min: 3 }),
     ], 'Provide a valid email or a username'),
-    body('password').isString().isLength({ min: 6 }).withMessage('Password min length 6'),
+    body('password').isString().isLength({ min: 4 }).withMessage('Password min length 4'),
   ],
   authController.login
 );
