@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMe } from '../lib/api'
 import logo from '../assets/agri-logo.png'
+import Chatbot from '../components/Chatbot'
 
 function Card({ title, description, icon, onClick, ghost = false }) {
   return (
@@ -105,6 +106,9 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+      
+      {/* Chatbot */}
+      <Chatbot />
     </div>
   )}
 

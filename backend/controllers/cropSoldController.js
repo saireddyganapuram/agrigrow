@@ -6,11 +6,18 @@ const User = require('../models/User');
 
 exports.recordCropSale = async (req, res) => {
   try {
+    console.log('=== CROP SALE RECORDING START ===');
+    console.log('Request body:', req.body);
+    console.log('User from token:', req.user);
+    
     const { cropListingId, quantity, transactionId, paymentMethod } = req.body;
     const customerId = req.user.id;
 
+    console.log('Customer ID:', customerId);
+
     // Get customer details
     const customer = await Customer.findById(customerId);
+    console.log('Customer found:', customer ? customer.fullname : 'NOT FOUND');
     if (!customer) {
       return res.status(404).json({ error: 'Customer not found' });
     }
@@ -57,12 +64,20 @@ exports.recordCropSale = async (req, res) => {
     });
 
     // Save both records
+    console.log('Saving crop sold record:', cropSold);
     await cropSold.save();
+    console.log('Crop sold record saved successfully');
+    
+    console.log('Saving customer purchase record:', customerPurchase);
     await customerPurchase.save();
+    console.log('Customer purchase record saved successfully');
 
     // Remove crop listing after purchase
+    console.log('Removing crop listing:', cropListingId);
     await CropListing.findByIdAndDelete(cropListingId);
+    console.log('Crop listing removed successfully');
 
+    console.log('=== CROP SALE RECORDING COMPLETE ===');
     res.status(201).json({
       message: 'Purchase completed successfully',
       sale: cropSold,
@@ -77,10 +92,15 @@ exports.recordCropSale = async (req, res) => {
 exports.getFarmerSales = async (req, res) => {
   try {
     const farmerId = req.user.id;
+    console.log('=== FETCHING FARMER SALES ===');
+    console.log('Farmer ID:', farmerId);
 
     const sales = await CropSold.find({ farmer: farmerId })
       .populate('customer', 'fullname')
       .sort({ purchaseDate: -1 });
+
+    console.log('Sales found:', sales.length);
+    console.log('Sales data:', sales);
 
     res.json({ sales });
   } catch (error) {
